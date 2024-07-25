@@ -14,10 +14,9 @@ export default function TaskPanel(props: TaskPanelProps) {
         <span className="h-5.2 leading-5 px-1.8 bg-gray-2 text-sm rounded-3 my-auto">
           {Object.values(props.tasks).length}
         </span>
-        <p className="h-5.4 leading-5 my-auto font-medium">
-          {props.group.name}
-        </p>
+        <p className="h-5.4 leading-5 my-auto font-500">{props.group.name}</p>
       </div>
+
       <div className="flex-1 overflow-y-scroll">
         <div className="h-fit pb-8 flex flex-col gap-2">
           {Object.values(props.tasks).map((task) => (

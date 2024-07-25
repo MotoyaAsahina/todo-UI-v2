@@ -1,9 +1,17 @@
 // uno.config.ts
 import presetWind from '@unocss/preset-wind'
-import { defineConfig } from 'unocss'
+import { defineConfig, presetWebFonts } from 'unocss'
 
 export default defineConfig({
-  presets: [presetWind()],
+  presets: [
+    presetWind(),
+    presetWebFonts({
+      provider: 'google',
+      fonts: {
+        sans: [{ name: 'Noto Sans JP', weights: ['300', '400', '500'] }],
+      },
+    }),
+  ],
   theme: {
     fontSize: {
       base: '0.9rem',

@@ -21,7 +21,7 @@ export default function App() {
   }, [])
 
   return (
-    <div className="text-gray-7 text-base">
+    <div className="text-gray-800 text-base font-sans">
       <div className="grid min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[260px_1fr]">
         <SideMenu />
         <MainContent tasks={tasks} groups={groups} tags={tags} />
