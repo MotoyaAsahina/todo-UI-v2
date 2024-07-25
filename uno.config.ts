@@ -12,6 +12,12 @@ export default defineConfig({
       },
     }),
   ],
+  rules: [
+    [
+      /^field-auto-sizing-(\d+)$/,
+      ([, d]) => ({ 'field-sizing': 'content', 'min-height': `${d}lh` }),
+    ],
+  ],
   theme: {
     fontSize: {
       base: '0.9rem',

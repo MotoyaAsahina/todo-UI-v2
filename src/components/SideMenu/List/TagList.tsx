@@ -14,7 +14,7 @@ export default function TagList(props: TagListProps) {
         {Object.values(props.tags).map((tag) => (
           <div key={tag.id} className="flex gap-1">
             <div
-              className="h-4 w-4 rounded-1 bg-gray-2"
+              className="h-3.6 w-3.6 my-auto rounded-1 bg-gray-2"
               style={{ backgroundColor: tag.mainColor }}
             />
             <p className="text-xs font-400">{tag.name}</p>

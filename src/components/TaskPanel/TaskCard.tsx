@@ -1,6 +1,6 @@
 import { IconCheck, IconDotsVertical } from '@tabler/icons-react'
 import clsx from 'clsx'
-import React, { useContext } from 'react'
+import { useContext, useState } from 'react'
 
 import { FetchContext } from '@/App'
 import TaskTag from '@/components/TaskTag/TaskTag'
@@ -14,8 +14,8 @@ type TaskCardProps = {
 }
 
 export default function TaskCard(props: TaskCardProps) {
-  const [isHovered, setIsHovered] = React.useState(false)
-  const [isOpened, setIsOpened] = React.useState(false)
+  const [isHovered, setIsHovered] = useState(false)
+  const [isOpened, setIsOpened] = useState(false)
 
   const { taskApi } = useApi()
   const { fetchAll } = useContext(FetchContext)

@@ -1,7 +1,12 @@
 import { IconDotsVertical, IconPlus } from '@tabler/icons-react'
+import clsx from 'clsx'
+import { useContext, useState } from 'react'
 
+import { FetchContext } from '@/App'
 import TaskCard from '@/components/TaskPanel/TaskCard'
-import { Group, Tag, Task } from '@/lib/apis'
+import TaskEditor from '@/components/TaskPanel/TaskEditor'
+import { Group, RequestTask, Tag, Task } from '@/lib/apis'
+import { useApi } from '@/lib/fetch'
 
 type TaskPanelProps = {
   group: Group
@@ -10,18 +15,54 @@ type TaskPanelProps = {
 }
 
 export default function TaskPanel(props: TaskPanelProps) {
+  const { taskApi } = useApi()
+  const { fetchAll } = useContext(FetchContext)
+
+  const [isAddingTask, setIsAddingTask] = useState(false)
+
+  const onClickAddTask = () => {
+    setIsAddingTask(!isAddingTask)
+    setTimeout(() => {
+      document.getElementById(`input-new-task-${props.group.id}-title`)?.focus()
+    }, 0)
+  }
+
+  const postTask = async (newTask: RequestTask) => {
+    newTask.groupId = props.group.id
+    newTask.order = null
+    await taskApi.postTask(newTask)
+    fetchAll()
+    setIsAddingTask(false)
+  }
+
   return (
     <div className="w-76 h-full flex flex-col gap-4">
-      <div className="h-10 px-2 bg-white rounded-1 flex gap-2">
-        <span className="h-5.2 leading-5 px-1.8 bg-gray-2 text-sm rounded-3 my-auto">
-          {props.tasks.length}
-        </span>
-        <div className="my-auto flex-1">
-          <p className="h-5.4 leading-5 my-auto font-500">{props.group.name}</p>
+      <div className="px-2 bg-white rounded-1">
+        <div className="h-10 flex gap-2">
+          <span className="h-5.2 leading-5 px-1.8 bg-gray-2 text-sm rounded-3 my-auto">
+            {props.tasks.length}
+          </span>
+          <div className="my-auto flex-1">
+            <p className="h-5.4 leading-5 my-auto font-500">
+              {props.group.name}
+            </p>
+          </div>
+          <div className="my-auto flex gap-0.6">
+            <IconPlus
+              className="cursor-pointer"
+              size={16}
+              onClick={onClickAddTask}
+            />
+            <IconDotsVertical className="cursor-pointer" size={16} />
+          </div>
         </div>
-        <div className="my-auto flex gap-0.6">
-          <IconPlus className="cursor-pointer" size={16} />
-          <IconDotsVertical className="cursor-pointer" size={16} />
+
+        <div className={clsx('py-2 b-t-1', !isAddingTask && 'hidden')}>
+          <TaskEditor
+            editorId={`new-task-${props.group.id}`}
+            tags={props.tags}
+            execute={postTask}
+          />
         </div>
       </div>
 
