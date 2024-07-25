@@ -15,6 +15,7 @@ export default defineConfig({
   theme: {
     fontSize: {
       base: '0.9rem',
+      md: '0.85rem',
       sm: '0.8rem',
     },
   },
