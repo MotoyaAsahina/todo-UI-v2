@@ -4,8 +4,8 @@ import { Configuration } from './apis'
 import { Group, GroupApi, Tag, TagApi, Task, TaskApi } from './apis/api'
 
 export function useApi() {
-  const [tasks, setTasks] = useState<{ [key: number]: Task }>([])
-  const [groups, setGroups] = useState<{ [key: number]: Group }>([])
+  const [tasks, setTasks] = useState<Task[]>([])
+  const [groups, setGroups] = useState<Group[]>([])
   const [tags, setTags] = useState<{ [key: number]: Tag }>([])
   const [loading, setLoading] = useState(false)
 
@@ -15,16 +15,12 @@ export function useApi() {
 
   const fetchTasks = async () => {
     const tasks = await taskApi.getTasks()
-    tasks.data.forEach((task) => {
-      setTasks((tasks) => ({ ...tasks, [task.id!]: task }))
-    })
+    setTasks(tasks.data)
   }
 
   const fetchGroups = async () => {
     const groups = await groupApi.getGroups()
-    groups.data.forEach((group) => {
-      setGroups((groups) => ({ ...groups, [group.id!]: group }))
-    })
+    setGroups(groups.data)
   }
 
   const fetchTags = async () => {

@@ -9,12 +9,12 @@ type TaskCardProps = {
 export default function TaskCard(props: TaskCardProps) {
   return (
     <div className="p-2 bg-white rounded-1 overflow-x-hidden">
-      <div className="flex flex-col gap-0.6">
+      <div className="flex flex-col gap-0.8">
         {/* Title */}
-        <p className="leading-snug font-400">{props.task.title}</p>
+        <p className="font-400">{props.task.title}</p>
 
         {/* Due date and tags */}
-        <div className="flex gap-1">
+        <div className="mt-0.6 flex gap-1">
           {props.task.dueDate ? (
             <p className="h-4.3 leading-4.3 font-300 mr-1">
               {props.task.dueDate}
