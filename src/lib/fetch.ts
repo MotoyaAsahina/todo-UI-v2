@@ -37,6 +37,9 @@ export function useApi() {
   }
 
   return {
+    taskApi,
+    groupApi,
+    tagApi,
     tasks,
     groups,
     tags,

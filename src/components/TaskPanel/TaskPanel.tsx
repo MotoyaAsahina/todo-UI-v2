@@ -1,3 +1,5 @@
+import { IconDotsVertical, IconPlus } from '@tabler/icons-react'
+
 import TaskCard from '@/components/TaskPanel/TaskCard'
 import { Group, Tag, Task } from '@/lib/apis'
 
@@ -14,7 +16,13 @@ export default function TaskPanel(props: TaskPanelProps) {
         <span className="h-5.2 leading-5 px-1.8 bg-gray-2 text-sm rounded-3 my-auto">
           {props.tasks.length}
         </span>
-        <p className="h-5.4 leading-5 my-auto font-500">{props.group.name}</p>
+        <div className="my-auto flex-1">
+          <p className="h-5.4 leading-5 my-auto font-500">{props.group.name}</p>
+        </div>
+        <div className="my-auto flex gap-0.6">
+          <IconPlus className="cursor-pointer" size={16} />
+          <IconDotsVertical className="cursor-pointer" size={16} />
+        </div>
       </div>
 
       <div className="flex-1 overflow-y-scroll">
