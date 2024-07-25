@@ -9,7 +9,7 @@ type MainContentProps = {
 
 export default function MainContent(props: MainContentProps) {
   return (
-    <div className="h-screen bg-slate-100 pt-10 overflow-x-scroll">
+    <div className="h-screen bg-slate-200 bg-opacity-60 pt-10 overflow-x-scroll">
       <div className="w-fit h-full flex mx-8 gap-6">
         {props.groups.map((group) => (
           <TaskPanel

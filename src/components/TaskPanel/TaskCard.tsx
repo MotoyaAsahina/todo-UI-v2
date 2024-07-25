@@ -6,6 +6,7 @@ import { FetchContext } from '@/App'
 import TaskTag from '@/components/TaskTag/TaskTag'
 import { Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
+import { formatDueDate, makeBR, makeURL } from '@/lib/text'
 
 type TaskCardProps = {
   task: Task
@@ -14,6 +15,7 @@ type TaskCardProps = {
 
 export default function TaskCard(props: TaskCardProps) {
   const [isHovered, setIsHovered] = React.useState(false)
+  const [isOpened, setIsOpened] = React.useState(false)
 
   const { taskApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
@@ -48,8 +50,11 @@ export default function TaskCard(props: TaskCardProps) {
         {/* Due date and tags */}
         <div className="mt-0.4 flex gap-1">
           {props.task.dueDate ? (
-            <p className="h-4.3 leading-4.3 font-300 mr-1">
-              {props.task.dueDate}
+            <p
+              className="h-4.3 leading-4.3 font-300 mr-1"
+              onClick={() => setIsOpened(!isOpened)}
+            >
+              {formatDueDate(props.task.dueDate)}
             </p>
           ) : null}
           {props.task.tags?.map((tagId) => (
@@ -58,11 +63,20 @@ export default function TaskCard(props: TaskCardProps) {
         </div>
 
         {/* Description */}
-        {props.task.description?.length && props.task.description.length > 0 ? (
-          <p className="text-sm leading-snug font-300">
-            {props.task.description}
-          </p>
-        ) : null}
+        <p
+          className={clsx(
+            'mt-0.2 text-sm leading-snug font-300',
+            (!props.task.description || props.task.description.length == 0) &&
+              'hidden',
+            !isOpened && 'truncate',
+          )}
+          onClick={() => setIsOpened(!isOpened)}
+          dangerouslySetInnerHTML={{
+            __html: isOpened
+              ? makeBR(makeURL(props.task.description ?? ''))
+              : makeURL(props.task.description ?? ''),
+          }}
+        />
       </div>
     </div>
   )
