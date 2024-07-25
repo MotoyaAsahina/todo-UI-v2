@@ -5,18 +5,27 @@ import SideMenu from '@/components/SideMenu/SideMenu'
 import { useApi } from '@/lib/fetch'
 
 export default function App() {
-  const { fetchAll } = useApi()
+  const {
+    tasks,
+    groups,
+    tags,
+    loading,
+    fetchTasks,
+    fetchGroups,
+    fetchTags,
+    fetchAll,
+  } = useApi()
 
   useEffect(() => {
     fetchAll()
   }, [])
 
   return (
-    <>
-      <div className="grid min-h-screen w-full md:grid-cols-[220px_1fr] lg:grid-cols-[280px_1fr]">
+    <div className="text-gray-7 text-base">
+      <div className="grid min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[260px_1fr]">
         <SideMenu />
-        <MainContent />
+        <MainContent tasks={tasks} groups={groups} tags={tags} />
       </div>
-    </>
+    </div>
   )
 }
