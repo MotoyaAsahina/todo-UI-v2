@@ -15,7 +15,7 @@ export default function SideMenu(props: SideMenuProps) {
 
       <input
         type="text"
-        className="w-full h-7 px-2 bg-white rounded-1 b-1 text-sm font-300"
+        className="h-7 px-2 bg-white rounded-1 mx-0.5 b-1 text-xs font-300"
         placeholder="Search"
       />
 

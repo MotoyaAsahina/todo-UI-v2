@@ -7,7 +7,7 @@ type TagListProps = {
 
 export default function TagList(props: TagListProps) {
   return (
-    <div className="my-2">
+    <div className="my-2 ml-1">
       <ListTitle>Tags</ListTitle>
 
       <div className="pl-2 flex flex-wrap gap-2.5 gap-row-2">

@@ -7,7 +7,7 @@ type GroupListProps = {
 
 export default function GroupList(props: GroupListProps) {
   return (
-    <div className="my-2">
+    <div className="my-2 ml-1">
       <ListTitle>Groups</ListTitle>
 
       <div className="pl-2 flex flex-col gap-3">
