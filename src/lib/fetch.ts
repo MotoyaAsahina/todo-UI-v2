@@ -1,52 +1,36 @@
-import { useState } from 'react'
-
 import { Configuration } from './apis'
-import { Group, GroupApi, Tag, TagApi, Task, TaskApi } from './apis/api'
+import { GroupApi, Tag, TagApi, TaskApi } from './apis/api'
 
 export function useApi() {
-  const [tasks, setTasks] = useState<Task[]>([])
-  const [groups, setGroups] = useState<Group[]>([])
-  const [tags, setTags] = useState<{ [key: number]: Tag }>([])
-  const [loading, setLoading] = useState(false)
-
   const taskApi = new TaskApi(new Configuration({ basePath: '' }))
   const groupApi = new GroupApi(new Configuration({ basePath: '' }))
   const tagApi = new TagApi(new Configuration({ basePath: '' }))
 
   const fetchTasks = async () => {
     const tasks = await taskApi.getTasks()
-    setTasks(tasks.data)
+    return tasks.data
   }
 
   const fetchGroups = async () => {
     const groups = await groupApi.getGroups()
-    setGroups(groups.data)
+    return groups.data
   }
 
   const fetchTags = async () => {
     const tags = await tagApi.getTags()
+    const tagMap: { [key: number]: Tag } = {}
     tags.data.forEach((tag) => {
-      setTags((tags) => ({ ...tags, [tag.id!]: tag }))
+      tagMap[tag.id!] = tag
     })
-  }
-
-  const fetchAll = async () => {
-    setLoading(true)
-    await Promise.all([fetchTasks(), fetchGroups(), fetchTags()])
-    setLoading(false)
+    return tagMap
   }
 
   return {
     taskApi,
     groupApi,
     tagApi,
-    tasks,
-    groups,
-    tags,
-    loading,
     fetchTasks,
     fetchGroups,
     fetchTags,
-    fetchAll,
   }
 }

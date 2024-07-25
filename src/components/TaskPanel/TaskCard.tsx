@@ -1,7 +1,8 @@
 import { IconCheck, IconDotsVertical } from '@tabler/icons-react'
 import clsx from 'clsx'
-import React from 'react'
+import React, { useContext } from 'react'
 
+import { FetchContext } from '@/App'
 import TaskTag from '@/components/TaskTag/TaskTag'
 import { Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
@@ -14,12 +15,12 @@ type TaskCardProps = {
 export default function TaskCard(props: TaskCardProps) {
   const [isHovered, setIsHovered] = React.useState(false)
 
-  const { taskApi, fetchTasks } = useApi()
+  const { taskApi } = useApi()
+  const { fetchAll } = useContext(FetchContext)
 
   const putTaskDone = async () => {
     await taskApi.putTaskDone(props.task.id!)
-    // FIXME: This doesn't re-render the task list
-    fetchTasks()
+    fetchAll()
   }
 
   return (
