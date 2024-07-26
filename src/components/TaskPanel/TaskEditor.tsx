@@ -107,7 +107,7 @@ export default function TaskEditor(props: TaskEditorProps) {
 
       {/* Description */}
       <textarea
-        className="w-full b-1 rounded-1 px-2 py-0.4lh text-sm leading-snug resize-none field-auto-sizing-3"
+        className="w-full b-1 rounded-1 px-2 py-0.4lh text-sm leading-snug resize-none field-auto-sizing-3_12"
         placeholder="Description"
         value={props.rawInputs.description}
         onChange={(e) => {

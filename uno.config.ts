@@ -14,8 +14,12 @@ export default defineConfig({
   ],
   rules: [
     [
-      /^field-auto-sizing-(\d+)$/,
-      ([, d]) => ({ 'field-sizing': 'content', 'min-height': `${d}lh` }),
+      /^field-auto-sizing-(\d+)_(\d+)$/,
+      ([, d1, d2]) => ({
+        'field-sizing': 'content',
+        'min-height': `${d1}lh`,
+        'max-height': `${d2}lh`,
+      }),
     ],
   ],
   theme: {
