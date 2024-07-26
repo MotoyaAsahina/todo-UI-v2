@@ -91,7 +91,12 @@ export default function TaskPanel(props: TaskPanelProps) {
       <div className="flex-1 overflow-y-scroll">
         <div className="h-fit pb-8 flex flex-col gap-2">
           {props.tasks.map((task) => (
-            <TaskCard key={task.id} task={task} tags={props.tags} />
+            <TaskCard
+              key={task.id}
+              groupId={props.group.id!}
+              task={task}
+              tags={props.tags}
+            />
           ))}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import { IconCheck, IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 import { RequestTask, Tag } from '@/lib/apis'
 
@@ -58,6 +58,25 @@ export default function TaskEditor(props: TaskEditorProps) {
     return tagsLowerCased
   }, [props.tags])
 
+  useEffect(() => {
+    const tags = props.rawInputs.tags
+      .split(' ')
+      .filter((tag) => tag)
+      .map((inputTag) => tagsLowerCased[inputTag.toLowerCase()]?.id ?? -1)
+    setInvalidTags(tags.includes(-1))
+
+    setRequestTask({
+      title: props.rawInputs.title,
+      dueDate: props.rawInputs.dueDate,
+      description: props.rawInputs.description,
+      tags: tags,
+      notificationTags:
+        props.rawInputs.notificationTags.length > 0
+          ? props.rawInputs.notificationTags.split(' ')
+          : [],
+    })
+  }, [props.rawInputs, tagsLowerCased])
+
   return (
     <div className="flex flex-col gap-1.6">
       {/* Title */}
@@ -68,7 +87,6 @@ export default function TaskEditor(props: TaskEditorProps) {
         placeholder="Title"
         value={props.rawInputs.title}
         onChange={(e) => {
-          setRequestTask({ ...requestTask, title: e.target.value })
           props.setRawInputs({ ...props.rawInputs, title: e.target.value })
         }}
         onKeyDown={handleKeyDown}
@@ -81,7 +99,6 @@ export default function TaskEditor(props: TaskEditorProps) {
         placeholder="Due date"
         value={props.rawInputs.dueDate}
         onChange={(e) => {
-          setRequestTask({ ...requestTask, dueDate: e.target.value })
           props.setRawInputs({ ...props.rawInputs, dueDate: e.target.value })
         }}
         onKeyDown={handleKeyDown}
@@ -93,7 +110,6 @@ export default function TaskEditor(props: TaskEditorProps) {
         placeholder="Description"
         value={props.rawInputs.description}
         onChange={(e) => {
-          setRequestTask({ ...requestTask, description: e.target.value })
           props.setRawInputs({
             ...props.rawInputs,
             description: e.target.value,
@@ -112,13 +128,6 @@ export default function TaskEditor(props: TaskEditorProps) {
         placeholder="Tags"
         value={props.rawInputs.tags}
         onChange={(e) => {
-          const inputTags = e.target.value.split(' ').filter((tag) => tag)
-          const tags = inputTags.map(
-            (inputTag) => tagsLowerCased[inputTag.toLowerCase()]?.id ?? -1,
-          )
-          setInvalidTags(tags.includes(-1))
-          setRequestTask({ ...requestTask, tags })
-
           props.setRawInputs({ ...props.rawInputs, tags: e.target.value })
         }}
         onKeyDown={handleKeyDown}
@@ -131,11 +140,6 @@ export default function TaskEditor(props: TaskEditorProps) {
         placeholder="Notifications"
         value={props.rawInputs.notificationTags}
         onChange={(e) => {
-          // TODO: validate
-          setRequestTask({
-            ...requestTask,
-            notificationTags: e.target.value.split(' '),
-          })
           props.setRawInputs({
             ...props.rawInputs,
             notificationTags: e.target.value,
