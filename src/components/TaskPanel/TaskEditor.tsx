@@ -4,14 +4,27 @@ import { useState } from 'react'
 
 import { RequestTask, Tag } from '@/lib/apis'
 
+export type RawRequestTask = {
+  title: string
+  dueDate: string
+  description: string
+  tags: string
+  notificationTags: string
+}
+
 type TaskEditorProps = {
   editorId: string
   tags: { [key: number]: Tag }
+  rawInputs: RawRequestTask
+  setRawInputs: (newTask: RawRequestTask) => void
   execute: (newTask: RequestTask) => void
+  cancel: () => void
 }
 
 export default function TaskEditor(props: TaskEditorProps) {
-  const [newTask, setNewTask] = useState<RequestTask>({
+  const [invalidTags, setInvalidTags] = useState(false)
+
+  const [requestTask, setRequestTask] = useState<RequestTask>({
     title: '',
     dueDate: '',
     description: '',
@@ -19,16 +32,21 @@ export default function TaskEditor(props: TaskEditorProps) {
     notificationTags: [],
   })
 
-  const [invalidTags, setInvalidTags] = useState(false)
-
   const handleAddTask = () => {
-    if (!newTask.title || !newTask.dueDate || invalidTags) return
-    props.execute(newTask)
+    if (!props.rawInputs.title || invalidTags) return
+    // TODO: Due date の null を許容
+    props.execute(requestTask)
+  }
+
+  const handleClose = () => {
+    props.cancel()
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
       handleAddTask()
+    } else if (e.key === 'Escape') {
+      handleClose()
     }
   }
 
@@ -40,7 +58,11 @@ export default function TaskEditor(props: TaskEditorProps) {
         type="text"
         className="w-full h-7 b-1 rounded-1 px-2 text-sm"
         placeholder="Title"
-        onChange={(e) => setNewTask({ ...newTask, title: e.target.value })}
+        value={props.rawInputs.title}
+        onChange={(e) => {
+          setRequestTask({ ...requestTask, title: e.target.value })
+          props.setRawInputs({ ...props.rawInputs, title: e.target.value })
+        }}
         onKeyDown={handleKeyDown}
       />
 
@@ -49,7 +71,11 @@ export default function TaskEditor(props: TaskEditorProps) {
         type="text"
         className="w-full h-7 b-1 rounded-1 px-2 text-sm"
         placeholder="Due date"
-        onChange={(e) => setNewTask({ ...newTask, dueDate: e.target.value })}
+        value={props.rawInputs.dueDate}
+        onChange={(e) => {
+          setRequestTask({ ...requestTask, dueDate: e.target.value })
+          props.setRawInputs({ ...props.rawInputs, dueDate: e.target.value })
+        }}
         onKeyDown={handleKeyDown}
       />
 
@@ -57,9 +83,14 @@ export default function TaskEditor(props: TaskEditorProps) {
       <textarea
         className="w-full b-1 rounded-1 px-2 py-0.4lh text-sm leading-snug resize-none field-auto-sizing-3"
         placeholder="Description"
-        onChange={(e) =>
-          setNewTask({ ...newTask, description: e.target.value })
-        }
+        value={props.rawInputs.description}
+        onChange={(e) => {
+          setRequestTask({ ...requestTask, description: e.target.value })
+          props.setRawInputs({
+            ...props.rawInputs,
+            description: e.target.value,
+          })
+        }}
         onKeyDown={handleKeyDown}
       />
 
@@ -68,9 +99,10 @@ export default function TaskEditor(props: TaskEditorProps) {
         type="text"
         className={clsx(
           'w-full h-7 b-1 rounded-1 px-2 text-sm',
-          invalidTags && 'border-red b-2',
+          invalidTags && 'border-red bg-red-300 b-2',
         )}
         placeholder="Tags"
+        value={props.rawInputs.tags}
         onChange={(e) => {
           const inputTags = e.target.value.split(' ').filter((tag) => tag)
           const tags = inputTags.map((inputTag) => {
@@ -80,7 +112,9 @@ export default function TaskEditor(props: TaskEditorProps) {
             return tag?.id ?? -1
           })
           setInvalidTags(tags.includes(-1))
-          setNewTask({ ...newTask, tags })
+          setRequestTask({ ...requestTask, tags })
+
+          props.setRawInputs({ ...props.rawInputs, tags: e.target.value })
         }}
         onKeyDown={handleKeyDown}
       />
@@ -90,21 +124,27 @@ export default function TaskEditor(props: TaskEditorProps) {
         type="text"
         className="w-full h-7 b-1 rounded-1 px-2 text-sm"
         placeholder="Notifications"
-        onChange={(e) =>
-          setNewTask({
-            ...newTask,
+        value={props.rawInputs.notificationTags}
+        onChange={(e) => {
+          // TODO: validate
+          setRequestTask({
+            ...requestTask,
             notificationTags: e.target.value.split(' '),
           })
-        }
+          props.setRawInputs({
+            ...props.rawInputs,
+            notificationTags: e.target.value,
+          })
+        }}
         onKeyDown={handleKeyDown}
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconX className="cursor-pointer" size={16} />
+        <IconX className="cursor-pointer" size={16} onClick={handleClose} />
         <IconCheck
           className="cursor-pointer"
           size={16}
-          onClick={() => handleAddTask()}
+          onClick={handleAddTask}
         />
       </div>
     </div>

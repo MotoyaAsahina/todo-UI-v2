@@ -28,7 +28,7 @@ export default function TaskCard(props: TaskCardProps) {
   return (
     <div
       className="p-2 bg-white rounded-1 overflow-x-hidden"
-      onMouseEnter={() => setIsHovered(true)}
+      onMouseOver={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex flex-col gap-0.8">

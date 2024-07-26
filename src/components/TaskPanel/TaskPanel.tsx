@@ -4,7 +4,7 @@ import { useContext, useState } from 'react'
 
 import { FetchContext } from '@/App'
 import TaskCard from '@/components/TaskPanel/TaskCard'
-import TaskEditor from '@/components/TaskPanel/TaskEditor'
+import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
 import { Group, RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
 
@@ -19,12 +19,31 @@ export default function TaskPanel(props: TaskPanelProps) {
   const { fetchAll } = useContext(FetchContext)
 
   const [isAddingTask, setIsAddingTask] = useState(false)
+  const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>({
+    title: '',
+    dueDate: '',
+    description: '',
+    tags: '',
+    notificationTags: '',
+  })
 
   const onClickAddTask = () => {
+    setRawRequestTask({
+      title: '',
+      dueDate: '',
+      description: '',
+      tags: '',
+      notificationTags: '',
+    })
+
     setIsAddingTask(!isAddingTask)
     setTimeout(() => {
       document.getElementById(`input-new-task-${props.group.id}-title`)?.focus()
     }, 0)
+  }
+
+  const closeTaskEditor = () => {
+    setIsAddingTask(false)
   }
 
   const postTask = async (newTask: RequestTask) => {
@@ -61,7 +80,10 @@ export default function TaskPanel(props: TaskPanelProps) {
           <TaskEditor
             editorId={`new-task-${props.group.id}`}
             tags={props.tags}
+            rawInputs={rawRequestTask}
+            setRawInputs={setRawRequestTask}
             execute={postTask}
+            cancel={closeTaskEditor}
           />
         </div>
       </div>
