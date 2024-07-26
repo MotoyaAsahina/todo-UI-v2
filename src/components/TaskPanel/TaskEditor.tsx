@@ -1,6 +1,6 @@
 import { IconCheck, IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 import { RequestTask, Tag } from '@/lib/apis'
 
@@ -49,6 +49,14 @@ export default function TaskEditor(props: TaskEditorProps) {
       handleClose()
     }
   }
+
+  const tagsLowerCased = useMemo(() => {
+    const tagsLowerCased: { [key: string]: Tag } = {}
+    Object.values(props.tags).forEach((tag) => {
+      tagsLowerCased[tag.name!.toLowerCase()] = tag
+    })
+    return tagsLowerCased
+  }, [props.tags])
 
   return (
     <div className="flex flex-col gap-1.6">
@@ -99,18 +107,15 @@ export default function TaskEditor(props: TaskEditorProps) {
         type="text"
         className={clsx(
           'w-full h-7 b-1 rounded-1 px-2 text-sm',
-          invalidTags && 'border-red bg-red-300 b-2',
+          invalidTags && 'bg-red-300',
         )}
         placeholder="Tags"
         value={props.rawInputs.tags}
         onChange={(e) => {
           const inputTags = e.target.value.split(' ').filter((tag) => tag)
-          const tags = inputTags.map((inputTag) => {
-            const tag = Object.values(props.tags).find(
-              (tag) => tag.name!.toLowerCase() === inputTag.toLowerCase(),
-            )
-            return tag?.id ?? -1
-          })
+          const tags = inputTags.map(
+            (inputTag) => tagsLowerCased[inputTag.toLowerCase()]?.id ?? -1,
+          )
           setInvalidTags(tags.includes(-1))
           setRequestTask({ ...requestTask, tags })
 
