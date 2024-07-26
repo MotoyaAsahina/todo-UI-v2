@@ -34,7 +34,6 @@ export default function TaskEditor(props: TaskEditorProps) {
 
   const handleAddTask = () => {
     if (!props.rawInputs.title || invalidTags) return
-    // TODO: Due date の null を許容
     props.execute(requestTask)
   }
 
@@ -65,9 +64,11 @@ export default function TaskEditor(props: TaskEditorProps) {
       .map((inputTag) => tagsLowerCased[inputTag.toLowerCase()]?.id ?? -1)
     setInvalidTags(tags.includes(-1))
 
+    // TODO: notificationTags の validation
+
     setRequestTask({
       title: props.rawInputs.title,
-      dueDate: props.rawInputs.dueDate,
+      dueDate: props.rawInputs.dueDate || null,
       description: props.rawInputs.description,
       tags: tags,
       notificationTags:
