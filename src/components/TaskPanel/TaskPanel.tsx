@@ -1,10 +1,11 @@
 import { IconDotsVertical, IconPlus } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 
 import { FetchContext } from '@/App'
 import TaskCard from '@/components/TaskPanel/TaskCard'
 import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
+import DropdownMenu from '@/components/UI/DropdownMenu'
 import IconBase from '@/components/UI/IconBase'
 import { Group, RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
@@ -33,6 +34,13 @@ export default function TaskPanel(props: TaskPanelProps) {
   const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>(
     defaultRawRequestTask,
   )
+
+  const menuIconRef = useRef<HTMLDivElement>(null)
+  const [isMenuOpened, setIsMenuOpened] = useState(false)
+
+  const handleMenuOpen = () => {
+    setIsMenuOpened(!isMenuOpened)
+  }
 
   const onClickAddTask = () => {
     setRawRequestTask(defaultRawRequestTask)
@@ -72,16 +80,35 @@ export default function TaskPanel(props: TaskPanelProps) {
           </div>
           <div
             className={clsx(
-              'flex gap-0.2',
-              !isHoveringTitle && !isAddingTask && 'invisible',
+              'flex gap-0.6 relative',
+              !isHoveringTitle && !isAddingTask && !isMenuOpened && 'invisible',
             )}
           >
             <IconBase onClick={onClickAddTask}>
               <IconPlus size={16} />
             </IconBase>
-            <IconBase>
+            <IconBase onClick={handleMenuOpen} ref2={menuIconRef}>
               <IconDotsVertical size={16} />
             </IconBase>
+
+            <div
+              className={clsx(
+                'absolute right-0 top-6 z-2',
+                !isMenuOpened && 'hidden',
+              )}
+            >
+              <DropdownMenu
+                items={[
+                  { label: 'Default Order', onClick: () => {} },
+                  { label: 'Manual Order', onClick: () => {} },
+                  { label: '---' },
+                  { label: 'Classify', onClick: () => {} },
+                  { label: 'Show Done', onClick: () => {} },
+                ]}
+                closeMenu={() => setIsMenuOpened(false)}
+                menuIconRef={menuIconRef}
+              />
+            </div>
           </div>
         </div>
 

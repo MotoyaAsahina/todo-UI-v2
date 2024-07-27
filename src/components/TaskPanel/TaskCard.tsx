@@ -1,10 +1,11 @@
 import { IconCheck, IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useContext, useEffect, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import { FetchContext } from '@/App'
 import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
 import TaskTag from '@/components/TaskTag/TaskTag'
+import DropdownMenu from '@/components/UI/DropdownMenu'
 import IconBase from '@/components/UI/IconBase'
 import { RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
@@ -82,9 +83,16 @@ export default function TaskCard(props: TaskCardProps) {
     })
   }, [])
 
+  const menuIconRef = useRef<HTMLDivElement>(null)
+  const [isMenuOpened, setIsMenuOpened] = useState(false)
+
+  const handleMenuOpen = () => {
+    setIsMenuOpened(!isMenuOpened)
+  }
+
   return (
     <div
-      className="p-2 bg-white rounded-1 overflow-x-hidden"
+      className="p-2 bg-white rounded-1"
       onMouseOver={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -107,19 +115,40 @@ export default function TaskCard(props: TaskCardProps) {
               {props.task.title}
             </p>
           </div>
-          <div className={clsx('gap-0.6', isHovered ? 'flex' : 'hidden')}>
+          <div
+            className={clsx(
+              'gap-0.6 relative',
+              isHovered || isMenuOpened ? 'flex' : 'hidden',
+            )}
+          >
             {isCmdPressed ? (
               <IconBase onClick={deleteTask}>
-                <IconTrash size={16} />
+                <IconTrash size={16} className="z-1" />
               </IconBase>
             ) : (
               <IconBase onClick={putTaskDone}>
-                <IconCheck size={16} />
+                <IconCheck size={16} className="z-1" />
               </IconBase>
             )}
-            <IconBase>
-              <IconDotsVertical size={16} />
+            <IconBase onClick={handleMenuOpen} ref2={menuIconRef}>
+              <IconDotsVertical size={16} className="z-1" />
             </IconBase>
+
+            <div
+              className={clsx(
+                'absolute right-0 top-6 z-2',
+                !isMenuOpened && 'hidden',
+              )}
+            >
+              <DropdownMenu
+                items={[
+                  { label: 'Pending', onClick: () => {} },
+                  { label: 'Pinned', onClick: () => {} },
+                ]}
+                closeMenu={() => setIsMenuOpened(false)}
+                menuIconRef={menuIconRef}
+              />
+            </div>
           </div>
         </div>
 
