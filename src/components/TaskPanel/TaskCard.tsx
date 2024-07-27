@@ -1,6 +1,6 @@
-import { IconCheck, IconDotsVertical } from '@tabler/icons-react'
+import { IconCheck, IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useContext, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { FetchContext } from '@/App'
 import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
@@ -66,6 +66,22 @@ export default function TaskCard(props: TaskCardProps) {
     setIsEditing(false)
   }
 
+  const deleteTask = async () => {
+    await taskApi.deleteTask(props.task.id!)
+    fetchAll()
+  }
+
+  const [isCmdPressed, setIsCmdPressed] = useState(false)
+
+  useEffect(() => {
+    document.body.addEventListener('keydown', (e) => {
+      if (e.key === 'Meta' || e.key === 'Control') setIsCmdPressed(true)
+    })
+    document.body.addEventListener('keyup', (e) => {
+      if (e.key === 'Meta' || e.key === 'Control') setIsCmdPressed(false)
+    })
+  }, [])
+
   return (
     <div
       className="p-2 bg-white rounded-1 overflow-x-hidden"
@@ -92,9 +108,15 @@ export default function TaskCard(props: TaskCardProps) {
             </p>
           </div>
           <div className={clsx('gap-0.6', isHovered ? 'flex' : 'hidden')}>
-            <IconBase onClick={putTaskDone}>
-              <IconCheck size={16} />
-            </IconBase>
+            {isCmdPressed ? (
+              <IconBase onClick={deleteTask}>
+                <IconTrash size={16} />
+              </IconBase>
+            ) : (
+              <IconBase onClick={putTaskDone}>
+                <IconCheck size={16} />
+              </IconBase>
+            )}
             <IconBase>
               <IconDotsVertical size={16} />
             </IconBase>
