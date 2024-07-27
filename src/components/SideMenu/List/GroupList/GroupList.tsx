@@ -86,11 +86,17 @@ export default function GroupList(props: GroupListProps) {
         />
       </div>
 
-      <div className="flex flex-col gap-0.5 rounded-1">
+      <div className="flex flex-col gap-0.5">
         {props.groups.map((group) => (
-          <div className="py-1.5 pl-2 hover:bg-slate-100" key={group.id}>
+          <div
+            className={clsx(
+              'py-1.5 px-2 hover:bg-slate-100 rounded-1',
+              isEditing && editingGroupId === group.id && 'bg-slate-100',
+            )}
+            key={group.id}
+          >
             <p
-              className="w-fit text-md font-400 cursor-pointer"
+              className="text-md font-400 cursor-pointer"
               onClick={() => onClickEdit(group)}
             >
               {group.name}

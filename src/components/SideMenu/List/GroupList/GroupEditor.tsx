@@ -12,7 +12,7 @@ type GroupEditorProps = {
 }
 
 export default function GroupEditor(props: GroupEditorProps) {
-  const handleAddTag = () => {
+  const handleAddGroup = () => {
     if (!props.newGroup.name) return
     props.execute()
   }
@@ -23,7 +23,7 @@ export default function GroupEditor(props: GroupEditorProps) {
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) {
-      handleAddTag()
+      handleAddGroup()
     } else if (e.key === 'Escape') {
       handleClose()
     }
@@ -68,8 +68,12 @@ export default function GroupEditor(props: GroupEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconX className="cursor-pointer" size={16} onClick={() => {}} />
-        <IconCheck className="cursor-pointer" size={16} onClick={() => {}} />
+        <IconX className="cursor-pointer" size={16} onClick={handleClose} />
+        <IconCheck
+          className="cursor-pointer"
+          size={16}
+          onClick={handleAddGroup}
+        />
       </div>
     </div>
   )

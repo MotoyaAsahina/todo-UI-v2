@@ -15,6 +15,8 @@ export default function TagList(props: TagListProps) {
   const { tagApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
 
+  const [hoveringId, setHoveringId] = useState<number | null>(null)
+
   const [isEditing, setIsEditing] = useState(false)
   const [editingTagId, setEditingTagId] = useState<number | null>(null)
 
@@ -86,12 +88,18 @@ export default function TagList(props: TagListProps) {
       </div>
 
       {/* Tag List */}
-      <div className="pl-2 flex flex-wrap gap-2.5 gap-row-2">
+      <div className="pl-2 flex flex-wrap gap-0.5 gap-row-0.6">
         {Object.values(props.tags).map((tag) => (
           <div
             key={tag.id}
-            className="flex gap-1 cursor-pointer"
+            className={clsx(
+              'flex gap-1 cursor-pointer rounded-1 px-1 py-0.8',
+              hoveringId === tag.id && 'bg-slate-100',
+              isEditing && editingTagId === tag.id && 'bg-slate-100',
+            )}
             onClick={() => onClickEdit(tag)}
+            onMouseEnter={() => setHoveringId(tag.id!)}
+            onMouseLeave={() => setHoveringId(null)}
           >
             <div
               className="h-3.6 w-3.6 my-auto rounded-1 bg-gray-2"
