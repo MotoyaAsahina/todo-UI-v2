@@ -64,23 +64,22 @@ export default function TaskPanel(props: TaskPanelProps) {
         onMouseEnter={() => setIsHoveringTitle(true)}
         onMouseLeave={() => setIsHoveringTitle(false)}
       >
-        <div className="h-10 flex gap-2">
-          <span className="h-5.2 leading-5 px-1.8 bg-slate-200 text-sm rounded-3 my-auto">
+        {/* Panel header */}
+        <div className="h-10 flex gap-2 items-center">
+          <span className="h-5.2 leading-5 px-1.8 bg-slate-200 text-sm rounded-3">
             {props.tasks.length}
           </span>
-          <div className="my-auto flex-1">
-            <p className="h-5.4 leading-5 my-auto font-500">
-              {props.group.name}
-            </p>
+          <div className="flex-1">
+            <p className="h-5.4 leading-5 font-500">{props.group.name}</p>
           </div>
           <div
             className={clsx(
-              'my-auto flex gap-0.2',
+              'flex gap-0.2',
               !isHoveringTitle && !isAddingTask && 'invisible',
             )}
           >
-            <IconBase>
-              <IconPlus size={16} onClick={onClickAddTask} />
+            <IconBase onClick={onClickAddTask}>
+              <IconPlus size={16} />
             </IconBase>
             <IconBase>
               <IconDotsVertical size={16} />
@@ -88,6 +87,7 @@ export default function TaskPanel(props: TaskPanelProps) {
           </div>
         </div>
 
+        {/* Task editor */}
         <div className={clsx('py-2 b-t-1', !isAddingTask && 'hidden')}>
           <TaskEditor
             editorId={`new-task-${props.group.id}`}

@@ -69,11 +69,11 @@ export default function GroupEditor(props: GroupEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconBase>
-          <IconX size={16} onClick={handleClose} />
+        <IconBase onClick={handleClose}>
+          <IconX size={16} />
         </IconBase>
-        <IconBase>
-          <IconCheck size={16} onClick={handleAddGroup} />
+        <IconBase onClick={handleAddGroup}>
+          <IconCheck size={16} />
         </IconBase>
       </div>
     </div>

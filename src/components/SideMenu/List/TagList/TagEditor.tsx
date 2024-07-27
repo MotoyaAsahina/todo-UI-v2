@@ -33,8 +33,8 @@ export default function TagEditor(props: TagEditorProps) {
 
   return (
     <div className="mb-3 rounded-1 p-2 b-1 flex flex-col gap-0.8 ml--1 mt--1">
-      <div className="mb-1 pl-1 flex gap-1">
-        <p className="text-xs font-300 my-auto">Preview: </p>
+      <div className="mb-1 pl-1 flex gap-1 items-center">
+        <p className="text-xs font-300">Preview: </p>
         <TaskTag
           tag={{
             name: props.newTag.name,
@@ -59,9 +59,9 @@ export default function TagEditor(props: TagEditorProps) {
       />
 
       {/* Main color */}
-      <div className="ml-2 mr-1 flex gap-1.5">
+      <div className="ml-2 mr-1 flex gap-1.5 items-center">
         <div
-          className="h-3.6 w-3.6 my-auto rounded-1 bg-gray-2"
+          className="h-3.6 w-3.6 rounded-1 bg-gray-2"
           style={{ backgroundColor: props.newTag.mainColor }}
         />
         <input
@@ -74,7 +74,7 @@ export default function TagEditor(props: TagEditorProps) {
           }
           onKeyDown={handleKeyDown}
         />
-        <label className="block my-auto h-fit relative">
+        <label className="block h-fit relative">
           <IconColorPicker className="cursor-pointer" size={16} />
           <input
             type="color"
@@ -88,9 +88,9 @@ export default function TagEditor(props: TagEditorProps) {
       </div>
 
       {/* Border color */}
-      <div className="ml-2 mr-1 flex gap-1.5">
+      <div className="ml-2 mr-1 flex gap-1.5 items-center">
         <div
-          className="h-3.6 w-3.6 my-auto rounded-1 bg-gray-2"
+          className="h-3.6 w-3.6 rounded-1 bg-gray-2"
           style={{
             backgroundColor: props.newTag.borderColor || '',
           }}
@@ -108,7 +108,7 @@ export default function TagEditor(props: TagEditorProps) {
           }
           onKeyDown={handleKeyDown}
         />
-        <label className="block my-auto h-fit relative">
+        <label className="block h-fit relative">
           <IconColorPicker className="cursor-pointer" size={16} />
           <input
             type="color"
@@ -137,11 +137,11 @@ export default function TagEditor(props: TagEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconBase>
-          <IconX size={16} onClick={handleClose} />
+        <IconBase onClick={handleClose}>
+          <IconX size={16} />
         </IconBase>
-        <IconBase>
-          <IconCheck size={16} onClick={handleAddTag} />
+        <IconBase onClick={handleAddTag}>
+          <IconCheck size={16} />
         </IconBase>
       </div>
     </div>

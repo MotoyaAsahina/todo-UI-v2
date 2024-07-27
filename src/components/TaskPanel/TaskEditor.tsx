@@ -151,11 +151,11 @@ export default function TaskEditor(props: TaskEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconBase>
-          <IconX size={16} onClick={handleClose} />
+        <IconBase onClick={handleClose}>
+          <IconX size={16} />
         </IconBase>
-        <IconBase>
-          <IconCheck size={16} onClick={handleAddTask} />
+        <IconBase onClick={handleAddTask}>
+          <IconCheck size={16} />
         </IconBase>
       </div>
     </div>

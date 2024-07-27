@@ -93,7 +93,7 @@ export default function TagList(props: TagListProps) {
           <div
             key={tag.id}
             className={clsx(
-              'flex gap-1 cursor-pointer rounded-1 px-1 py-0.8',
+              'flex gap-1 cursor-pointer rounded-1 px-1 py-0.8 items-center',
               hoveringId === tag.id && 'bg-slate-100',
               isEditing && editingTagId === tag.id && 'bg-slate-100',
             )}
@@ -102,7 +102,7 @@ export default function TagList(props: TagListProps) {
             onMouseLeave={() => setHoveringId(null)}
           >
             <div
-              className="h-3.6 w-3.6 my-auto rounded-1 bg-gray-2"
+              className="h-3.6 w-3.6 rounded-1 bg-gray-2"
               style={{ backgroundColor: tag.mainColor }}
             />
             <p className="text-xs font-400">{tag.name}</p>

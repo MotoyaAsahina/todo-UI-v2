@@ -73,8 +73,8 @@ export default function TaskCard(props: TaskCardProps) {
     >
       <div className={clsx('flex-col gap-0.8', isEditing ? 'hidden' : 'flex')}>
         {/* Title */}
-        <div className="h-4.4 flex relative">
-          <div className="my-auto flex-1">
+        <div className="h-4.4 flex items-center">
+          <div className="flex-1">
             <p
               className="w-fit font-400 cursor-pointer"
               onClick={openTaskEditor}
@@ -82,14 +82,9 @@ export default function TaskCard(props: TaskCardProps) {
               {props.task.title}
             </p>
           </div>
-          <div
-            className={clsx(
-              'absolute right-0 top--1.6px gap-0.6',
-              isHovered ? 'flex' : 'hidden',
-            )}
-          >
-            <IconBase>
-              <IconCheck size={16} onClick={putTaskDone} />
+          <div className={clsx('gap-0.6', isHovered ? 'flex' : 'hidden')}>
+            <IconBase onClick={putTaskDone}>
+              <IconCheck size={16} />
             </IconBase>
             <IconBase>
               <IconDotsVertical size={16} />
