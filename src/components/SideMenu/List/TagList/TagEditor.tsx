@@ -1,6 +1,7 @@
 import { IconCheck, IconColorPicker, IconX } from '@tabler/icons-react'
 
 import TaskTag from '@/components/TaskTag/TaskTag'
+import IconBase from '@/components/UI/IconBase'
 import { RequestTag } from '@/lib/apis'
 
 type TagEditorProps = {
@@ -136,12 +137,12 @@ export default function TagEditor(props: TagEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconX className="cursor-pointer" size={16} onClick={handleClose} />
-        <IconCheck
-          className="cursor-pointer"
-          size={16}
-          onClick={handleAddTag}
-        />
+        <IconBase>
+          <IconX size={16} onClick={handleClose} />
+        </IconBase>
+        <IconBase>
+          <IconCheck size={16} onClick={handleAddTag} />
+        </IconBase>
       </div>
     </div>
   )

@@ -2,6 +2,7 @@ import { IconCheck, IconX } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { useEffect, useMemo, useState } from 'react'
 
+import IconBase from '@/components/UI/IconBase'
 import { RequestTask, Tag } from '@/lib/apis'
 
 export type RawRequestTask = {
@@ -150,12 +151,12 @@ export default function TaskEditor(props: TaskEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconX className="cursor-pointer" size={16} onClick={handleClose} />
-        <IconCheck
-          className="cursor-pointer"
-          size={16}
-          onClick={handleAddTask}
-        />
+        <IconBase>
+          <IconX size={16} onClick={handleClose} />
+        </IconBase>
+        <IconBase>
+          <IconCheck size={16} onClick={handleAddTask} />
+        </IconBase>
       </div>
     </div>
   )

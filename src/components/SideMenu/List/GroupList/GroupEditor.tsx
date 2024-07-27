@@ -1,5 +1,6 @@
 import { IconCheck, IconX } from '@tabler/icons-react'
 
+import IconBase from '@/components/UI/IconBase'
 import { RequestGroup } from '@/lib/apis'
 
 type GroupEditorProps = {
@@ -68,12 +69,12 @@ export default function GroupEditor(props: GroupEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
-        <IconX className="cursor-pointer" size={16} onClick={handleClose} />
-        <IconCheck
-          className="cursor-pointer"
-          size={16}
-          onClick={handleAddGroup}
-        />
+        <IconBase>
+          <IconX size={16} onClick={handleClose} />
+        </IconBase>
+        <IconBase>
+          <IconCheck size={16} onClick={handleAddGroup} />
+        </IconBase>
       </div>
     </div>
   )

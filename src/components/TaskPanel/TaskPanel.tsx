@@ -5,6 +5,7 @@ import { useContext, useState } from 'react'
 import { FetchContext } from '@/App'
 import TaskCard from '@/components/TaskPanel/TaskCard'
 import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
+import IconBase from '@/components/UI/IconBase'
 import { Group, RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
 
@@ -17,6 +18,8 @@ type TaskPanelProps = {
 export default function TaskPanel(props: TaskPanelProps) {
   const { taskApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
+
+  const [isHoveringTitle, setIsHoveringTitle] = useState(false)
 
   const [isAddingTask, setIsAddingTask] = useState(false)
   const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>({
@@ -56,9 +59,13 @@ export default function TaskPanel(props: TaskPanelProps) {
 
   return (
     <div className="w-76 h-full flex flex-col gap-4">
-      <div className="px-2 bg-white rounded-1">
+      <div
+        className="px-2 bg-white rounded-1"
+        onMouseEnter={() => setIsHoveringTitle(true)}
+        onMouseLeave={() => setIsHoveringTitle(false)}
+      >
         <div className="h-10 flex gap-2">
-          <span className="h-5.2 leading-5 px-1.8 bg-gray-2 text-sm rounded-3 my-auto">
+          <span className="h-5.2 leading-5 px-1.8 bg-slate-200 text-sm rounded-3 my-auto">
             {props.tasks.length}
           </span>
           <div className="my-auto flex-1">
@@ -66,13 +73,18 @@ export default function TaskPanel(props: TaskPanelProps) {
               {props.group.name}
             </p>
           </div>
-          <div className="my-auto flex gap-0.6">
-            <IconPlus
-              className="cursor-pointer"
-              size={16}
-              onClick={onClickAddTask}
-            />
-            <IconDotsVertical className="cursor-pointer" size={16} />
+          <div
+            className={clsx(
+              'my-auto flex gap-0.2',
+              !isHoveringTitle && !isAddingTask && 'invisible',
+            )}
+          >
+            <IconBase>
+              <IconPlus size={16} onClick={onClickAddTask} />
+            </IconBase>
+            <IconBase>
+              <IconDotsVertical size={16} />
+            </IconBase>
           </div>
         </div>
 

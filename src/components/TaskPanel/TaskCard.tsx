@@ -5,6 +5,7 @@ import { useContext, useState } from 'react'
 import { FetchContext } from '@/App'
 import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
 import TaskTag from '@/components/TaskTag/TaskTag'
+import IconBase from '@/components/UI/IconBase'
 import { RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
 import { formatDueDate, makeBR, makeURL } from '@/lib/text'
@@ -72,7 +73,7 @@ export default function TaskCard(props: TaskCardProps) {
     >
       <div className={clsx('flex-col gap-0.8', isEditing ? 'hidden' : 'flex')}>
         {/* Title */}
-        <div className="h-4 flex">
+        <div className="h-4.4 flex relative">
           <div className="my-auto flex-1">
             <p
               className="w-fit font-400 cursor-pointer"
@@ -81,18 +82,28 @@ export default function TaskCard(props: TaskCardProps) {
               {props.task.title}
             </p>
           </div>
-          <div className={clsx('gap-0.6', isHovered ? 'flex' : 'hidden')}>
-            <IconCheck
-              className="cursor-pointer"
-              size={16}
-              onClick={putTaskDone}
-            />
-            <IconDotsVertical className="cursor-pointer" size={16} />
+          <div
+            className={clsx(
+              'absolute right-0 top--1.6px gap-0.6',
+              isHovered ? 'flex' : 'hidden',
+            )}
+          >
+            <IconBase>
+              <IconCheck size={16} onClick={putTaskDone} />
+            </IconBase>
+            <IconBase>
+              <IconDotsVertical size={16} />
+            </IconBase>
           </div>
         </div>
 
         {/* Due date and tags */}
-        <div className="mt-0.4 flex gap-1">
+        <div
+          className={clsx(
+            'mt-0.4 flex-wrap gap-1',
+            !props.task.dueDate && !props.task.tags!.length ? 'hidden' : 'flex',
+          )}
+        >
           {props.task.dueDate ? (
             <p
               className="h-4.3 leading-4.3 font-300 mr-1"
