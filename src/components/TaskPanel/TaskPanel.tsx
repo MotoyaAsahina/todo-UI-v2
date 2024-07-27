@@ -15,6 +15,14 @@ type TaskPanelProps = {
   tags: { [key: number]: Tag }
 }
 
+const defaultRawRequestTask: RawRequestTask = {
+  title: '',
+  dueDate: '',
+  description: '',
+  tags: '',
+  notificationTags: '',
+}
+
 export default function TaskPanel(props: TaskPanelProps) {
   const { taskApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
@@ -22,22 +30,12 @@ export default function TaskPanel(props: TaskPanelProps) {
   const [isHoveringTitle, setIsHoveringTitle] = useState(false)
 
   const [isAddingTask, setIsAddingTask] = useState(false)
-  const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>({
-    title: '',
-    dueDate: '',
-    description: '',
-    tags: '',
-    notificationTags: '',
-  })
+  const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>(
+    defaultRawRequestTask,
+  )
 
   const onClickAddTask = () => {
-    setRawRequestTask({
-      title: '',
-      dueDate: '',
-      description: '',
-      tags: '',
-      notificationTags: '',
-    })
+    setRawRequestTask(defaultRawRequestTask)
 
     setIsAddingTask(!isAddingTask)
     setTimeout(() => {

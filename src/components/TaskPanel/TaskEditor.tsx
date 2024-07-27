@@ -25,13 +25,7 @@ type TaskEditorProps = {
 export default function TaskEditor(props: TaskEditorProps) {
   const [invalidTags, setInvalidTags] = useState(false)
 
-  const [requestTask, setRequestTask] = useState<RequestTask>({
-    title: '',
-    dueDate: '',
-    description: '',
-    tags: [],
-    notificationTags: [],
-  })
+  const [requestTask, setRequestTask] = useState<RequestTask>({})
 
   const handleAddTask = () => {
     if (!props.rawInputs.title || invalidTags) return

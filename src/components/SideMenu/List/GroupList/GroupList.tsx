@@ -11,6 +11,14 @@ type GroupListProps = {
   groups: Group[]
 }
 
+const defaultGroup: RequestGroup = {
+  name: '',
+  description: '',
+  classifiedBy: null,
+  hasDueDate: 'OPTIONAL',
+  order: undefined,
+}
+
 export default function GroupList(props: GroupListProps) {
   const { groupApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
@@ -18,22 +26,12 @@ export default function GroupList(props: GroupListProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editingGroupId, setEditingGroupId] = useState<number | null>(null)
 
-  const [newGroup, setNewGroup] = useState<RequestGroup>({
-    name: '',
-    description: '',
-    classifiedBy: '',
-  })
+  const [newGroup, setNewGroup] = useState<RequestGroup>(defaultGroup)
 
   const onClickCreate = () => {
     if (!isEditing || (isEditing && !editingGroupId)) setIsEditing(!isEditing)
     setEditingGroupId(null)
-    setNewGroup({
-      name: '',
-      description: '',
-      classifiedBy: null,
-      hasDueDate: 'OPTIONAL',
-      order: props.groups.length,
-    })
+    setNewGroup({ ...defaultGroup, order: props.groups.length })
 
     setTimeout(() => {
       document.getElementById('input-group-name')?.focus()
@@ -43,13 +41,7 @@ export default function GroupList(props: GroupListProps) {
   const onClickEdit = (group: Group) => {
     setIsEditing(true)
     setEditingGroupId(group.id!)
-    setNewGroup({
-      name: group.name,
-      description: group.description,
-      classifiedBy: group.classifiedBy,
-      hasDueDate: group.hasDueDate,
-      order: group.order,
-    })
+    setNewGroup(group)
 
     setTimeout(() => {
       document.getElementById('input-group-name')?.focus()

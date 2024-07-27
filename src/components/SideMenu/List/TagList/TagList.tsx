@@ -11,6 +11,13 @@ type TagListProps = {
   tags: { [key: number]: Tag }
 }
 
+const defaultTag: RequestTag = {
+  name: '',
+  mainColor: '',
+  borderColor: null,
+  classification: null,
+}
+
 export default function TagList(props: TagListProps) {
   const { tagApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
@@ -20,22 +27,12 @@ export default function TagList(props: TagListProps) {
   const [isEditing, setIsEditing] = useState(false)
   const [editingTagId, setEditingTagId] = useState<number | null>(null)
 
-  const [newTag, setNewTag] = useState<RequestTag>({
-    name: '',
-    mainColor: '',
-    borderColor: '',
-    classification: '',
-  })
+  const [newTag, setNewTag] = useState<RequestTag>(defaultTag)
 
   const onClickCreate = () => {
     if (!isEditing || (isEditing && !editingTagId)) setIsEditing(!isEditing)
     setEditingTagId(null)
-    setNewTag({
-      name: '',
-      mainColor: '',
-      borderColor: null,
-      classification: null,
-    })
+    setNewTag(defaultTag)
 
     setTimeout(() => {
       document.getElementById('input-tag-name')?.focus()
@@ -45,12 +42,7 @@ export default function TagList(props: TagListProps) {
   const onClickEdit = (tag: Tag) => {
     setIsEditing(true)
     setEditingTagId(tag.id!)
-    setNewTag({
-      name: tag.name,
-      mainColor: tag.mainColor,
-      borderColor: tag.borderColor,
-      classification: tag.classification,
-    })
+    setNewTag(tag)
 
     setTimeout(() => {
       document.getElementById('input-tag-name')?.focus()
