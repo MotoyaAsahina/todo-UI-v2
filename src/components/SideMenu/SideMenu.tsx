@@ -1,5 +1,5 @@
 import AppLogo from '@/components/SideMenu/AppLogo'
-import GroupList from '@/components/SideMenu/List/GroupList'
+import GroupList from '@/components/SideMenu/List/GroupList/GroupList'
 import TagList from '@/components/SideMenu/List/TagList/TagList'
 import { Group, Tag } from '@/lib/apis'
 
@@ -10,8 +10,8 @@ type SideMenuProps = {
 
 export default function SideMenu(props: SideMenuProps) {
   return (
-    <div className="h-screen overflow-y-scroll hidden md:block">
-      <div className="flex b-r-0.75 px-4 flex-col gap-5">
+    <div className="h-screen overflow-y-scroll overflow-x-hidden hidden md:block">
+      <div className="flex b-r-0.75 p-4 flex-col gap-5">
         <AppLogo />
 
         <input
