@@ -11,8 +11,11 @@ export default function ListTitle(props: ListTitleProps) {
       <p className="text-base font-400 leading-tight flex-1">
         {props.children}
       </p>
-      <div className="h-fit p-0.4 b-1 rd-1 cursor-pointer">
-        <IconPlus size={13} stroke={1.5} onClick={props.onClickCreate} />
+      <div
+        className="h-fit p-0.4 b-1 rd-1 cursor-pointer"
+        onClick={props.onClickCreate}
+      >
+        <IconPlus size={13} stroke={1.5} />
       </div>
     </div>
   )
