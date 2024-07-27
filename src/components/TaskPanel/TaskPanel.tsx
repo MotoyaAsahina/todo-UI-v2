@@ -93,7 +93,7 @@ export default function TaskPanel(props: TaskPanelProps) {
 
             <div
               className={clsx(
-                'absolute right-0 top-6 z-2',
+                'absolute right-0 top-6 z-10',
                 !isMenuOpened && 'hidden',
               )}
             >

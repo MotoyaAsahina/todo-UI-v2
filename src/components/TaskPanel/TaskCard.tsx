@@ -48,6 +48,18 @@ export default function TaskCard(props: TaskCardProps) {
     fetchAll()
   }
 
+  const putTaskPinnedOrUnpinned = async () => {
+    if (props.task.pinned) await taskApi.putTaskUnpinned(props.task.id!)
+    else await taskApi.putTaskPinned(props.task.id!)
+    fetchAll()
+  }
+
+  const putTaskPendingOrUnpending = async () => {
+    if (props.task.pending) await taskApi.putTaskUnpending(props.task.id!)
+    else await taskApi.putTaskPending(props.task.id!)
+    fetchAll()
+  }
+
   const openTaskEditor = () => {
     setRawRequestTask({
       title: props.task.title!,
@@ -92,10 +104,18 @@ export default function TaskCard(props: TaskCardProps) {
 
   return (
     <div
-      className="p-2 bg-white rounded-1"
+      className="p-2 bg-white rounded-1 relative"
       onMouseOver={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      <div
+        className={clsx(
+          'w-full h-full absolute top-0 left-0 rounded-1 pointer-events-none',
+          'bg-slate-100 opacity-50',
+          !props.task.pending && 'hidden',
+        )}
+      />
+
       <div className={clsx('flex-col gap-0.8', isEditing ? 'hidden' : 'flex')}>
         {/* Title */}
         <div className="h-4.4 flex items-center">
@@ -109,7 +129,10 @@ export default function TaskCard(props: TaskCardProps) {
           </p>
           <div className="flex-1">
             <p
-              className="w-fit font-400 cursor-pointer"
+              className={clsx(
+                'w-fit cursor-pointer',
+                props.task.pending ? 'font-300' : 'font-400',
+              )}
               onClick={openTaskEditor}
             >
               {props.task.title}
@@ -134,16 +157,25 @@ export default function TaskCard(props: TaskCardProps) {
               <IconDotsVertical size={16} className="z-1" />
             </IconBase>
 
+            {/* Dropdown Menu */}
             <div
               className={clsx(
-                'absolute right-0 top-6 z-2',
+                'absolute right-0 top-6 z-10',
                 !isMenuOpened && 'hidden',
               )}
             >
               <DropdownMenu
                 items={[
-                  { label: 'Pending', onClick: () => {} },
-                  { label: 'Pinned', onClick: () => {} },
+                  {
+                    label: 'Pending',
+                    check: props.task.pending,
+                    onClick: putTaskPendingOrUnpending,
+                  },
+                  {
+                    label: 'Pinned',
+                    check: props.task.pinned,
+                    onClick: putTaskPinnedOrUnpinned,
+                  },
                 ]}
                 closeMenu={() => setIsMenuOpened(false)}
                 menuIconRef={menuIconRef}

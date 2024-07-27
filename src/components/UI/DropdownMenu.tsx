@@ -37,10 +37,14 @@ export default function DropdownMenu(props: DropdownMenuProps) {
             className="px-2 py-1 rounded-1 hover:bg-slate-100 cursor-pointer"
             onClick={() => {
               item.onClick!()
+              props.closeMenu()
             }}
           >
             <div className="flex gap-2 items-center">
-              <IconCheck size={14} className={clsx(!item.check, 'invisible')} />
+              <IconCheck
+                size={14}
+                className={clsx(!item.check && 'invisible')}
+              />
               <p className="text-sm">{item.label}</p>
             </div>
           </div>
