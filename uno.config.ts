@@ -9,6 +9,7 @@ export default defineConfig({
       provider: 'google',
       fonts: {
         sans: [{ name: 'Noto Sans JP', weights: ['300', '400', '500'] }],
+        emoji: [{ name: 'Noto Color Emoji', weights: ['400'] }],
       },
     }),
   ],

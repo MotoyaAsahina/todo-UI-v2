@@ -8,6 +8,7 @@ import TaskTag from '@/components/TaskTag/TaskTag'
 import IconBase from '@/components/UI/IconBase'
 import { RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
+import { selectStamp } from '@/lib/stamp'
 import { formatDueDate, makeBR, makeURL } from '@/lib/text'
 
 type TaskCardProps = {
@@ -74,6 +75,14 @@ export default function TaskCard(props: TaskCardProps) {
       <div className={clsx('flex-col gap-0.8', isEditing ? 'hidden' : 'flex')}>
         {/* Title */}
         <div className="h-4.4 flex items-center">
+          <p
+            className={clsx(
+              'text-md font-emoji mr-0.8',
+              !props.task.dueDate && 'hidden',
+            )}
+          >
+            {selectStamp(props.task.dueDate)}
+          </p>
           <div className="flex-1">
             <p
               className="w-fit font-400 cursor-pointer"
