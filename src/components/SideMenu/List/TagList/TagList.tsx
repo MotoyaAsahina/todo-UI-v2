@@ -33,8 +33,8 @@ export default function TagList(props: TagListProps) {
     setNewTag({
       name: '',
       mainColor: '',
-      borderColor: '',
-      classification: '',
+      borderColor: null,
+      classification: null,
     })
 
     setTimeout(() => {
@@ -71,6 +71,20 @@ export default function TagList(props: TagListProps) {
     closeTagEditor()
   }
 
+  const deleteTag = async () => {
+    if (!editingTagId) return
+    await tagApi.deleteTag(editingTagId)
+    fetchAll()
+    closeTagEditor()
+  }
+
+  const archiveTag = async () => {
+    if (!editingTagId) return
+    await tagApi.putTagArchived(editingTagId)
+    fetchAll()
+    closeTagEditor()
+  }
+
   return (
     <div className="my-2 ml-1">
       <ListTitle onClickCreate={onClickCreate}>Tags</ListTitle>
@@ -84,6 +98,8 @@ export default function TagList(props: TagListProps) {
           setNewTag={setNewTag}
           execute={postOrPutTag}
           cancel={closeTagEditor}
+          archive={archiveTag}
+          delete={deleteTag}
         />
       </div>
 

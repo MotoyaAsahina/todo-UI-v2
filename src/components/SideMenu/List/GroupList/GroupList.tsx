@@ -30,7 +30,7 @@ export default function GroupList(props: GroupListProps) {
     setNewGroup({
       name: '',
       description: '',
-      classifiedBy: '',
+      classifiedBy: null,
       hasDueDate: 'OPTIONAL',
       order: props.groups.length,
     })
@@ -70,6 +70,20 @@ export default function GroupList(props: GroupListProps) {
     closeGroupEditor()
   }
 
+  const deleteGroup = async () => {
+    if (!editingGroupId) return
+    await groupApi.deleteGroup(editingGroupId)
+    fetchAll()
+    closeGroupEditor()
+  }
+
+  const archiveGroup = async () => {
+    if (!editingGroupId) return
+    await groupApi.putGroupArchived(editingGroupId)
+    fetchAll()
+    closeGroupEditor()
+  }
+
   return (
     <div className="my-2 ml-1">
       <ListTitle onClickCreate={onClickCreate}>Groups</ListTitle>
@@ -83,6 +97,8 @@ export default function GroupList(props: GroupListProps) {
           setNewGroup={setNewGroup}
           execute={postOrPutGroup}
           cancel={closeGroupEditor}
+          archive={archiveGroup}
+          delete={deleteGroup}
         />
       </div>
 
@@ -90,17 +106,13 @@ export default function GroupList(props: GroupListProps) {
         {props.groups.map((group) => (
           <div
             className={clsx(
-              'py-1.5 px-2 hover:bg-slate-100 rounded-1',
+              'py-1.5 px-2 hover:bg-slate-100 rounded-1 cursor-pointer',
               isEditing && editingGroupId === group.id && 'bg-slate-100',
             )}
             key={group.id}
+            onClick={() => onClickEdit(group)}
           >
-            <p
-              className="text-md font-400 cursor-pointer"
-              onClick={() => onClickEdit(group)}
-            >
-              {group.name}
-            </p>
+            <p className="text-md font-400">{group.name}</p>
           </div>
         ))}
       </div>

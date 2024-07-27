@@ -7,7 +7,7 @@ type ListTitleProps = {
 
 export default function ListTitle(props: ListTitleProps) {
   return (
-    <div className="mb-4 flex items-center">
+    <div className="mb-3 flex items-center">
       <p className="text-base font-400 leading-tight flex-1">
         {props.children}
       </p>

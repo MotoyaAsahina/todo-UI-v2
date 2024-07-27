@@ -1,4 +1,11 @@
-import { IconCheck, IconColorPicker, IconX } from '@tabler/icons-react'
+import {
+  IconArchive,
+  IconCheck,
+  IconColorPicker,
+  IconTrash,
+  IconX,
+} from '@tabler/icons-react'
+import clsx from 'clsx'
 
 import TaskTag from '@/components/TaskTag/TaskTag'
 import IconBase from '@/components/UI/IconBase'
@@ -11,6 +18,8 @@ type TagEditorProps = {
   setNewTag: (newTag: RequestTag) => void
   execute: () => void
   cancel: () => void
+  archive: () => void
+  delete: () => void
 }
 
 export default function TagEditor(props: TagEditorProps) {
@@ -137,6 +146,17 @@ export default function TagEditor(props: TagEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
+        <div
+          className={clsx('gap-0.6', props.editingTagId ? 'flex' : 'hidden')}
+        >
+          <IconBase onClick={props.delete}>
+            <IconTrash size={16} />
+          </IconBase>
+          <IconBase onClick={props.archive}>
+            <IconArchive size={16} />
+          </IconBase>
+          <div className="b-0.5 mx-1 my-0.4" />
+        </div>
         <IconBase onClick={handleClose}>
           <IconX size={16} />
         </IconBase>

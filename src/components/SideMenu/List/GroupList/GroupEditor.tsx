@@ -1,4 +1,5 @@
-import { IconCheck, IconX } from '@tabler/icons-react'
+import { IconArchive, IconCheck, IconTrash, IconX } from '@tabler/icons-react'
+import clsx from 'clsx'
 
 import IconBase from '@/components/UI/IconBase'
 import { RequestGroup } from '@/lib/apis'
@@ -10,6 +11,8 @@ type GroupEditorProps = {
   setNewGroup: (newGroup: RequestGroup) => void
   execute: () => void
   cancel: () => void
+  archive: () => void
+  delete: () => void
 }
 
 export default function GroupEditor(props: GroupEditorProps) {
@@ -69,6 +72,17 @@ export default function GroupEditor(props: GroupEditorProps) {
       />
 
       <div className="flex gap-0.6 justify-end mt-1">
+        <div
+          className={clsx('gap-0.6', props.editingGroupId ? 'flex' : 'hidden')}
+        >
+          <IconBase onClick={props.delete}>
+            <IconTrash size={16} />
+          </IconBase>
+          <IconBase onClick={props.archive}>
+            <IconArchive size={16} />
+          </IconBase>
+          <div className="b-0.5 mx-1 my-0.4" />
+        </div>
         <IconBase onClick={handleClose}>
           <IconX size={16} />
         </IconBase>
