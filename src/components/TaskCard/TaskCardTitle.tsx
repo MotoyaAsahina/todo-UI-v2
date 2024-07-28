@@ -105,15 +105,18 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
           props.isCardHovered || isMenuOpened ? 'flex' : 'hidden',
         )}
       >
-        {isCmdPressed ? (
-          <IconBase onClick={deleteTask}>
-            <IconTrash size={16} />
-          </IconBase>
-        ) : (
-          <IconBase onClick={putTaskDone}>
-            <IconCheck size={16} />
-          </IconBase>
-        )}
+        <IconBase
+          className={clsx(!isCmdPressed && 'hidden')}
+          onClick={deleteTask}
+        >
+          <IconTrash size={16} />
+        </IconBase>
+        <IconBase
+          className={clsx(isCmdPressed && 'hidden')}
+          onClick={putTaskDone}
+        >
+          <IconCheck size={16} />
+        </IconBase>
         <IconBase
           onClick={() => setIsMenuOpened(!isMenuOpened)}
           ref={menuIconRef}

@@ -87,15 +87,15 @@ export default function TaskCard(props: TaskCardProps) {
         <div
           className={clsx(
             'mt-0.4 flex-wrap gap-1',
-            !props.task.dueDate &&
-              (!props.task.tags!.length ||
-                !props.task.tags?.filter(
-                  (tagId) => !props.hiddenTagIds?.includes(tagId),
-                ).length)
-              ? 'hidden'
-              : 'flex',
+            props.task.dueDate ||
+              props.task.tags?.some(
+                (tagId) => !props.hiddenTagIds?.includes(tagId),
+              )
+              ? 'flex'
+              : 'hidden',
           )}
         >
+          {/* Due date */}
           <p
             className={clsx(
               'h-4.3 leading-4.3 font-300 mr-1',
@@ -105,6 +105,8 @@ export default function TaskCard(props: TaskCardProps) {
           >
             {formatDueDate(props.task.dueDate)}
           </p>
+
+          {/* Tags */}
           {props.task.tags
             ?.filter((tagId) => !props.hiddenTagIds?.includes(tagId))
             .map((tagId) => <TaskTag key={tagId} tag={props.tags[tagId]} />)}
@@ -114,8 +116,7 @@ export default function TaskCard(props: TaskCardProps) {
         <p
           className={clsx(
             'mt-0.2 text-sm leading-snug font-300',
-            (!props.task.description || props.task.description.length == 0) &&
-              'hidden',
+            !props.task.description?.length && 'hidden',
             !isOpened && 'truncate',
           )}
           onClick={() => setIsOpened(!isOpened)}
@@ -127,7 +128,7 @@ export default function TaskCard(props: TaskCardProps) {
         />
       </div>
 
-      <div className={isEditing ? '' : 'hidden'}>
+      <div className={clsx(!isEditing && 'hidden')}>
         <TaskEditor
           editorId={`edit-task-${props.task.id}`}
           tags={props.tags}

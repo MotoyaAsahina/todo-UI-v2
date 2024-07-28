@@ -20,6 +20,9 @@ export default function DropdownMenu(props: DropdownMenuProps) {
         return
       props.closeMenu()
     })
+    document.body.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') props.closeMenu()
+    })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
