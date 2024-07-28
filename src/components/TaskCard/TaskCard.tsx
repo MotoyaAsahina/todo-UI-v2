@@ -1,15 +1,13 @@
-import { IconCheck, IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useState } from 'react'
+
+import TaskCardTitle from './TaskCardTitle'
 
 import { FetchContext } from '@/App'
 import TaskEditor, { RawRequestTask } from '@/components/TaskEditor/TaskEditor'
 import TaskTag from '@/components/TaskTag/TaskTag'
-import DropdownMenu from '@/components/UI/DropdownMenu'
-import IconBase from '@/components/UI/IconBase'
 import { RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
-import { selectStamp } from '@/lib/stamp'
 import { formatDueDate, makeBR, makeURL } from '@/lib/text'
 
 type TaskCardProps = {
@@ -44,23 +42,6 @@ export default function TaskCard(props: TaskCardProps) {
     setIsEditing(false)
   }
 
-  const putTaskDone = async () => {
-    await taskApi.putTaskDone(props.task.id!)
-    fetchAll()
-  }
-
-  const putTaskPinnedOrUnpinned = async () => {
-    if (props.task.pinned) await taskApi.putTaskUnpinned(props.task.id!)
-    else await taskApi.putTaskPinned(props.task.id!)
-    fetchAll()
-  }
-
-  const putTaskPendingOrUnpending = async () => {
-    if (props.task.pending) await taskApi.putTaskUnpending(props.task.id!)
-    else await taskApi.putTaskPending(props.task.id!)
-    fetchAll()
-  }
-
   const openTaskEditor = () => {
     setRawRequestTask({
       title: props.task.title!,
@@ -80,29 +61,6 @@ export default function TaskCard(props: TaskCardProps) {
     setIsEditing(false)
   }
 
-  const deleteTask = async () => {
-    await taskApi.deleteTask(props.task.id!)
-    fetchAll()
-  }
-
-  const [isCmdPressed, setIsCmdPressed] = useState(false)
-
-  useEffect(() => {
-    document.body.addEventListener('keydown', (e) => {
-      if (e.key === 'Meta' || e.key === 'Control') setIsCmdPressed(true)
-    })
-    document.body.addEventListener('keyup', (e) => {
-      if (e.key === 'Meta' || e.key === 'Control') setIsCmdPressed(false)
-    })
-  }, [])
-
-  const menuIconRef = useRef<HTMLDivElement>(null)
-  const [isMenuOpened, setIsMenuOpened] = useState(false)
-
-  const handleMenuOpen = () => {
-    setIsMenuOpened(!isMenuOpened)
-  }
-
   return (
     <div
       className="p-2 bg-white rounded-1 relative"
@@ -119,72 +77,11 @@ export default function TaskCard(props: TaskCardProps) {
 
       <div className={clsx('flex-col gap-0.8', isEditing ? 'hidden' : 'flex')}>
         {/* Title */}
-        <div className="h-4.4 flex items-center">
-          <p
-            className={clsx(
-              'text-md font-emoji mr-0.8',
-              !props.task.dueDate && 'hidden',
-            )}
-          >
-            {selectStamp(props.task.dueDate)}
-          </p>
-          <div className="flex-1">
-            <p
-              className={clsx(
-                'w-fit cursor-pointer',
-                props.task.pending ? 'font-300' : 'font-400',
-              )}
-              onClick={openTaskEditor}
-              title={`Created at: ${props.task.createdAt}\nUpdated at: ${props.task.updatedAt}`}
-            >
-              {props.task.title}
-            </p>
-          </div>
-          <div
-            className={clsx(
-              'gap-0.6 relative',
-              isHovered || isMenuOpened ? 'flex' : 'hidden',
-            )}
-          >
-            {isCmdPressed ? (
-              <IconBase onClick={deleteTask}>
-                <IconTrash size={16} />
-              </IconBase>
-            ) : (
-              <IconBase onClick={putTaskDone}>
-                <IconCheck size={16} />
-              </IconBase>
-            )}
-            <IconBase onClick={handleMenuOpen} ref2={menuIconRef}>
-              <IconDotsVertical size={16} />
-            </IconBase>
-
-            {/* Dropdown Menu */}
-            <div
-              className={clsx(
-                'absolute right-0 top-6 z-10',
-                !isMenuOpened && 'hidden',
-              )}
-            >
-              <DropdownMenu
-                items={[
-                  {
-                    label: 'Pending',
-                    check: props.task.pending,
-                    onClick: putTaskPendingOrUnpending,
-                  },
-                  {
-                    label: 'Pinned',
-                    check: props.task.pinned,
-                    onClick: putTaskPinnedOrUnpinned,
-                  },
-                ]}
-                closeMenu={() => setIsMenuOpened(false)}
-                menuIconRef={menuIconRef}
-              />
-            </div>
-          </div>
-        </div>
+        <TaskCardTitle
+          task={props.task}
+          isCardHovered={isHovered}
+          openTaskEditor={openTaskEditor}
+        />
 
         {/* Due date and tags */}
         <div
