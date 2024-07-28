@@ -148,15 +148,15 @@ export default function TaskCard(props: TaskCardProps) {
           >
             {isCmdPressed ? (
               <IconBase onClick={deleteTask}>
-                <IconTrash size={16} className="z-1" />
+                <IconTrash size={16} />
               </IconBase>
             ) : (
               <IconBase onClick={putTaskDone}>
-                <IconCheck size={16} className="z-1" />
+                <IconCheck size={16} />
               </IconBase>
             )}
             <IconBase onClick={handleMenuOpen} ref2={menuIconRef}>
-              <IconDotsVertical size={16} className="z-1" />
+              <IconDotsVertical size={16} />
             </IconBase>
 
             {/* Dropdown Menu */}
