@@ -45,7 +45,7 @@ export default function DropdownMenu(props: DropdownMenuProps) {
                 size={14}
                 className={clsx(!item.check && 'invisible')}
               />
-              <p className="text-sm">{item.label}</p>
+              <p className="text-xs font-400">{item.label}</p>
             </div>
           </div>
         ),

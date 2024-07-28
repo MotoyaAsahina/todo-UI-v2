@@ -134,6 +134,7 @@ export default function TaskCard(props: TaskCardProps) {
                 props.task.pending ? 'font-300' : 'font-400',
               )}
               onClick={openTaskEditor}
+              title={`Created at: ${props.task.createdAt}\nUpdated at: ${props.task.updatedAt}`}
             >
               {props.task.title}
             </p>
