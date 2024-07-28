@@ -1,14 +1,12 @@
-import { IconDotsVertical, IconPlus } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useState } from 'react'
 
 import ClassifiedTaskList from './TaskList/ClassifiedTaskList'
 import DefaultTaskList from './TaskList/DefaultTaskList'
+import TaskPanelHeader from './TaskPanelHeader'
 
 import { FetchContext } from '@/App'
 import TaskEditor, { RawRequestTask } from '@/components/TaskEditor/TaskEditor'
-import DropdownMenu from '@/components/UI/DropdownMenu'
-import IconBase from '@/components/UI/IconBase'
 import { Group, RequestTask, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
 
@@ -38,16 +36,9 @@ export default function TaskPanel(props: TaskPanelProps) {
     setIsAddingTask(false)
   }
 
-  const [isHoveringTitle, setIsHoveringTitle] = useState(false)
+  const [isHoveringHeader, setIsHoveringHeader] = useState(false)
 
   const [isClassified, setIsClassified] = useState(true)
-
-  const menuIconRef = useRef<HTMLDivElement>(null)
-  const [isMenuOpened, setIsMenuOpened] = useState(false)
-
-  const handleMenuOpen = () => {
-    setIsMenuOpened(!isMenuOpened)
-  }
 
   const [isAddingTask, setIsAddingTask] = useState(false)
   const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>(
@@ -66,70 +57,26 @@ export default function TaskPanel(props: TaskPanelProps) {
     setIsAddingTask(false)
   }
 
-  const dropdownMenuItems = [
-    { label: 'Default Order', onClick: () => {} },
-    { label: 'Manual Order', onClick: () => {} },
-    { label: '---' },
-    {
-      label: 'Classify',
-      check: isClassified,
-      onClick: () => {
-        setIsClassified(!isClassified)
-      },
-    },
-    { label: 'Show Done', onClick: () => {} },
-  ]
-
   return (
     <div className="w-76 h-full flex flex-col gap-4">
-      {/* Panel header with editor */}
+      {/* Panel header with task editor */}
       <div
         className="px-2 bg-white rounded-1"
-        onMouseEnter={() => setIsHoveringTitle(true)}
-        onMouseLeave={() => setIsHoveringTitle(false)}
+        onMouseEnter={() => setIsHoveringHeader(true)}
+        onMouseLeave={() => setIsHoveringHeader(false)}
       >
-        {/* Panel header */}
-        <div className="h-10 flex gap-2 items-center">
-          {/* Task length */}
-          <span className="h-5.2 leading-5 px-1.8 bg-slate-200 text-sm rounded-3">
-            {props.tasks.length}
-          </span>
+        <TaskPanelHeader
+          group={props.group}
+          taskLength={props.tasks.length}
+          onClickAddTask={onClickAddTask}
+          state={{
+            isHoveringHeader,
+            isAddingTask,
+            isClassified,
+            setIsClassified,
+          }}
+        />
 
-          {/* Group name */}
-          <div className="flex-1">
-            <p className="h-5.4 leading-5 font-500">{props.group.name}</p>
-          </div>
-
-          {/* Icons */}
-          <div
-            className={clsx(
-              'flex gap-0.6 relative',
-              !isHoveringTitle && !isAddingTask && !isMenuOpened && 'invisible',
-            )}
-          >
-            <IconBase onClick={onClickAddTask}>
-              <IconPlus size={16} />
-            </IconBase>
-            <IconBase onClick={handleMenuOpen} ref={menuIconRef}>
-              <IconDotsVertical size={16} />
-            </IconBase>
-
-            <div
-              className={clsx(
-                'absolute right-0 top-6 z-10',
-                !isMenuOpened && 'hidden',
-              )}
-            >
-              <DropdownMenu
-                items={dropdownMenuItems}
-                closeMenu={() => setIsMenuOpened(false)}
-                menuIconRef={menuIconRef}
-              />
-            </div>
-          </div>
-        </div>
-
-        {/* Task editor */}
         <div className={clsx('py-2 b-t-1', !isAddingTask && 'hidden')}>
           <TaskEditor
             editorId={`new-task-${props.group.id}`}
