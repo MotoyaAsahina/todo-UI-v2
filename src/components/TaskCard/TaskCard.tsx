@@ -3,7 +3,7 @@ import clsx from 'clsx'
 import { useContext, useEffect, useRef, useState } from 'react'
 
 import { FetchContext } from '@/App'
-import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
+import TaskEditor, { RawRequestTask } from '@/components/TaskEditor/TaskEditor'
 import TaskTag from '@/components/TaskTag/TaskTag'
 import DropdownMenu from '@/components/UI/DropdownMenu'
 import IconBase from '@/components/UI/IconBase'
