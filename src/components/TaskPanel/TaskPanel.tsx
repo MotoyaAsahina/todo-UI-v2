@@ -114,7 +114,7 @@ export default function TaskPanel(props: TaskPanelProps) {
             <IconBase onClick={onClickAddTask}>
               <IconPlus size={16} />
             </IconBase>
-            <IconBase onClick={handleMenuOpen} ref2={menuIconRef}>
+            <IconBase onClick={handleMenuOpen} ref={menuIconRef}>
               <IconDotsVertical size={16} />
             </IconBase>
 

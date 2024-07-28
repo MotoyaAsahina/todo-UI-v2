@@ -61,8 +61,11 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
 
   const [isCmdPressed, setIsCmdPressed] = useState(false)
   useEffect(() => {
+    const ua = window.navigator.userAgent.toLowerCase()
+    const mac = ua.indexOf('windows nt') === -1
     document.body.addEventListener('keydown', (e) => {
-      if (e.key === 'Meta' || e.key === 'Control') setIsCmdPressed(true)
+      if ((mac && e.key === 'Meta') || (!mac && e.key === 'Control'))
+        setIsCmdPressed(true)
     })
     document.body.addEventListener('keyup', (e) => {
       if (e.key === 'Meta' || e.key === 'Control') setIsCmdPressed(false)
@@ -113,7 +116,7 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
         )}
         <IconBase
           onClick={() => setIsMenuOpened(!isMenuOpened)}
-          ref2={menuIconRef}
+          ref={menuIconRef}
         >
           <IconDotsVertical size={16} />
         </IconBase>
