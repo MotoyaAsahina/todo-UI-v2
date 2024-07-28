@@ -30,12 +30,15 @@ export default function TaskPanel(props: TaskPanelProps) {
   const { taskApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
 
-  const [isHoveringTitle, setIsHoveringTitle] = useState(false)
+  const postTask = async (newTask: RequestTask) => {
+    newTask.groupId = props.group.id
+    newTask.order = null
+    await taskApi.postTask(newTask)
+    fetchAll()
+    setIsAddingTask(false)
+  }
 
-  const [isAddingTask, setIsAddingTask] = useState(false)
-  const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>(
-    defaultRawRequestTask,
-  )
+  const [isHoveringTitle, setIsHoveringTitle] = useState(false)
 
   const [isClassified, setIsClassified] = useState(true)
 
@@ -46,9 +49,13 @@ export default function TaskPanel(props: TaskPanelProps) {
     setIsMenuOpened(!isMenuOpened)
   }
 
+  const [isAddingTask, setIsAddingTask] = useState(false)
+  const [rawRequestTask, setRawRequestTask] = useState<RawRequestTask>(
+    defaultRawRequestTask,
+  )
+
   const onClickAddTask = () => {
     setRawRequestTask(defaultRawRequestTask)
-
     setIsAddingTask(!isAddingTask)
     setTimeout(() => {
       document.getElementById(`input-new-task-${props.group.id}-title`)?.focus()
@@ -59,16 +66,23 @@ export default function TaskPanel(props: TaskPanelProps) {
     setIsAddingTask(false)
   }
 
-  const postTask = async (newTask: RequestTask) => {
-    newTask.groupId = props.group.id
-    newTask.order = null
-    await taskApi.postTask(newTask)
-    fetchAll()
-    setIsAddingTask(false)
-  }
+  const dropdownMenuItems = [
+    { label: 'Default Order', onClick: () => {} },
+    { label: 'Manual Order', onClick: () => {} },
+    { label: '---' },
+    {
+      label: 'Classify',
+      check: isClassified,
+      onClick: () => {
+        setIsClassified(!isClassified)
+      },
+    },
+    { label: 'Show Done', onClick: () => {} },
+  ]
 
   return (
     <div className="w-76 h-full flex flex-col gap-4">
+      {/* Panel header with editor */}
       <div
         className="px-2 bg-white rounded-1"
         onMouseEnter={() => setIsHoveringTitle(true)}
@@ -76,12 +90,17 @@ export default function TaskPanel(props: TaskPanelProps) {
       >
         {/* Panel header */}
         <div className="h-10 flex gap-2 items-center">
+          {/* Task length */}
           <span className="h-5.2 leading-5 px-1.8 bg-slate-200 text-sm rounded-3">
             {props.tasks.length}
           </span>
+
+          {/* Group name */}
           <div className="flex-1">
             <p className="h-5.4 leading-5 font-500">{props.group.name}</p>
           </div>
+
+          {/* Icons */}
           <div
             className={clsx(
               'flex gap-0.6 relative',
@@ -102,19 +121,7 @@ export default function TaskPanel(props: TaskPanelProps) {
               )}
             >
               <DropdownMenu
-                items={[
-                  { label: 'Default Order', onClick: () => {} },
-                  { label: 'Manual Order', onClick: () => {} },
-                  { label: '---' },
-                  {
-                    label: 'Classify',
-                    check: isClassified,
-                    onClick: () => {
-                      setIsClassified(!isClassified)
-                    },
-                  },
-                  { label: 'Show Done', onClick: () => {} },
-                ]}
+                items={dropdownMenuItems}
                 closeMenu={() => setIsMenuOpened(false)}
                 menuIconRef={menuIconRef}
               />
@@ -135,6 +142,7 @@ export default function TaskPanel(props: TaskPanelProps) {
         </div>
       </div>
 
+      {/* Task list */}
       <div className="flex-1 overflow-y-scroll">
         <div className="pb-8">
           {isClassified && props.group.classifiedBy ? (
