@@ -1,7 +1,8 @@
 import clsx from 'clsx'
 import { useMemo } from 'react'
 
-import TaskCard from '@/components/TaskCard/TaskCard'
+import DefaultTaskList from './DefaultTaskList'
+
 import TaskTag from '@/components/TaskTag/TaskTag'
 import { Group, Tag, Task } from '@/lib/apis'
 
@@ -36,56 +37,59 @@ export default function ClassifiedTaskList(props: ClassifiedTaskListProps) {
     return usedClassificationTags
   }, [classificationTags, props.tasks, props.group.id])
 
+  const classifiedTasks = useMemo(() => {
+    const classifiedTasks: { [key: number]: Task[] } = {}
+    usedClassificationTags.forEach((tag) => {
+      classifiedTasks[tag.id!] = props.tasks.filter((task) =>
+        tag.id! > 0
+          ? task.tags?.includes(tag.id!)
+          : usedClassificationTags.every(
+              (tag) => !task.tags?.includes(tag.id!),
+            ),
+      )
+    })
+    return classifiedTasks
+  }, [usedClassificationTags, props.tasks])
+
+  const unusedClassificationTags = useMemo(() => {
+    return classificationTags.filter(
+      (tag) => !usedClassificationTags.includes(tag),
+    )
+  }, [classificationTags, usedClassificationTags])
+
   return (
-    <div className="pb-8 flex flex-col gap-4">
-      {[...usedClassificationTags].map((tag) => (
-        <div key={tag.id}>
+    <div className="flex flex-col gap-4">
+      {/* Classified Task List */}
+      {usedClassificationTags.map((tag) => (
+        <div key={tag.id} className="flex flex-col gap-2">
+          {/* Classification Tag */}
           <div className="pl-1">
             {tag.id! > 0 ? (
               <TaskTag tag={tag} />
             ) : (
-              <p className="text-xs font-400">Unclassified</p>
+              <p className="h-4.3 leading-4.3 text-xs font-400">Unclassified</p>
             )}
           </div>
-          <div className="h-fit flex flex-col gap-2 mt-2">
-            {props.tasks
-              .filter((task) =>
-                tag.id! > 0
-                  ? task.tags?.includes(tag.id!)
-                  : usedClassificationTags.every(
-                      (tag) => !task.tags?.includes(tag.id!),
-                    ),
-              )
-              .map((task) => {
-                return (
-                  <TaskCard
-                    key={task.id}
-                    groupId={props.group.id!}
-                    task={task}
-                    tags={props.tags}
-                    hiddenTagIds={[tag.id!]}
-                  />
-                )
-              })}
-          </div>
+
+          {/* Task List */}
+          <DefaultTaskList
+            group={props.group}
+            tasks={classifiedTasks[tag.id!]}
+            tags={props.tags}
+            hiddenTagIds={[tag.id!]}
+          />
         </div>
       ))}
-      <div
-        className={clsx(
-          classificationTags.length ===
-            usedClassificationTags.filter((tag) => tag.id !== -1).length &&
-            'hidden',
-        )}
-      >
+
+      {/* Unused Tags */}
+      <div className={clsx(!unusedClassificationTags.length && 'hidden')}>
         <div className="pl-1">
           <p className="text-xs font-400">Unused tags</p>
         </div>
         <div className="px-1 flex flex-wrap gap-1 mt-1.6">
-          {classificationTags
-            .filter((tag) => !usedClassificationTags.includes(tag))
-            .map((tag) => (
-              <TaskTag key={tag.id} tag={tag} />
-            ))}
+          {unusedClassificationTags.map((tag) => (
+            <TaskTag key={tag.id} tag={tag} />
+          ))}
         </div>
       </div>
     </div>

@@ -136,19 +136,21 @@ export default function TaskPanel(props: TaskPanelProps) {
       </div>
 
       <div className="flex-1 overflow-y-scroll">
-        {isClassified && props.group.classifiedBy ? (
-          <ClassifiedTaskList
-            group={props.group}
-            tasks={props.tasks}
-            tags={props.tags}
-          />
-        ) : (
-          <DefaultTaskList
-            group={props.group}
-            tasks={props.tasks}
-            tags={props.tags}
-          />
-        )}
+        <div className="pb-8">
+          {isClassified && props.group.classifiedBy ? (
+            <ClassifiedTaskList
+              group={props.group}
+              tasks={props.tasks}
+              tags={props.tags}
+            />
+          ) : (
+            <DefaultTaskList
+              group={props.group}
+              tasks={props.tasks}
+              tags={props.tags}
+            />
+          )}
+        </div>
       </div>
     </div>
   )
