@@ -1,4 +1,5 @@
-const formatDueDate = (d: string) => {
+const formatDueDate = (d?: string | null) => {
+  if (!d) return ''
   const date = new Date(d)
   const year =
     date.getFullYear() !== new Date().getFullYear()

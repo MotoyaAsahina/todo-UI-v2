@@ -1,10 +1,11 @@
 import { IconDotsVertical, IconPlus } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useMemo, useRef, useState } from 'react'
 
 import { FetchContext } from '@/App'
 import TaskCard from '@/components/TaskPanel/TaskCard'
 import TaskEditor, { RawRequestTask } from '@/components/TaskPanel/TaskEditor'
+import TaskTag from '@/components/TaskTag/TaskTag'
 import DropdownMenu from '@/components/UI/DropdownMenu'
 import IconBase from '@/components/UI/IconBase'
 import { Group, RequestTask, Tag, Task } from '@/lib/apis'
@@ -35,6 +36,8 @@ export default function TaskPanel(props: TaskPanelProps) {
     defaultRawRequestTask,
   )
 
+  const [isClassified, setIsClassified] = useState(true)
+
   const menuIconRef = useRef<HTMLDivElement>(null)
   const [isMenuOpened, setIsMenuOpened] = useState(false)
 
@@ -62,6 +65,22 @@ export default function TaskPanel(props: TaskPanelProps) {
     fetchAll()
     setIsAddingTask(false)
   }
+
+  const classificationTags = useMemo(() => {
+    return props.group.classifiedBy
+      ? Object.values(props.tags).filter(
+          (tag) => tag.classification === props.group.classifiedBy,
+        )
+      : []
+  }, [props.tags, props.group.classifiedBy])
+
+  const usedClassificationTags = useMemo(() => {
+    return classificationTags.filter((tag) =>
+      props.tasks
+        .filter((task) => task.groupId === props.group.id)
+        .some((task) => task.tags?.includes(tag.id!)),
+    )
+  }, [classificationTags, props.tasks, props.group.id])
 
   return (
     <div className="w-76 h-full flex flex-col gap-4">
@@ -102,7 +121,13 @@ export default function TaskPanel(props: TaskPanelProps) {
                   { label: 'Default Order', onClick: () => {} },
                   { label: 'Manual Order', onClick: () => {} },
                   { label: '---' },
-                  { label: 'Classify', onClick: () => {} },
+                  {
+                    label: 'Classify',
+                    check: isClassified,
+                    onClick: () => {
+                      setIsClassified(!isClassified)
+                    },
+                  },
                   { label: 'Show Done', onClick: () => {} },
                 ]}
                 closeMenu={() => setIsMenuOpened(false)}
@@ -125,18 +150,70 @@ export default function TaskPanel(props: TaskPanelProps) {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-scroll">
-        <div className="h-fit pb-8 flex flex-col gap-2">
-          {props.tasks.map((task) => (
-            <TaskCard
-              key={task.id}
-              groupId={props.group.id!}
-              task={task}
-              tags={props.tags}
-            />
-          ))}
+      {isClassified && props.group.classifiedBy ? (
+        <div className="flex-1 overflow-y-scroll">
+          <div className="pb-8 flex flex-col gap-4">
+            {[...usedClassificationTags, { id: -1 }].map((tag) => (
+              <div key={tag.id}>
+                {tag.id! > 0 ? (
+                  <TaskTag tag={tag} />
+                ) : (
+                  <p className="text-xs font-400">Unclassified</p>
+                )}
+                <div className="h-fit flex flex-col gap-2 mt-2">
+                  {props.tasks
+                    .filter((task) =>
+                      tag.id! > 0
+                        ? task.tags?.includes(tag.id!)
+                        : usedClassificationTags.every(
+                            (tag) => !task.tags?.includes(tag.id!),
+                          ),
+                    )
+                    .map((task) => {
+                      return (
+                        <TaskCard
+                          key={task.id}
+                          groupId={props.group.id!}
+                          task={task}
+                          tags={props.tags}
+                          hiddenTagIds={[tag.id!]}
+                        />
+                      )
+                    })}
+                </div>
+              </div>
+            ))}
+            <div
+              className={clsx(
+                classificationTags.length === usedClassificationTags.length &&
+                  'hidden',
+              )}
+            >
+              <p className="text-xs font-400">Unused tags</p>
+              <div className="flex flex-wrap gap-1 mt-2">
+                {classificationTags
+                  .filter((tag) => !usedClassificationTags.includes(tag))
+                  .map((tag) => (
+                    <TaskTag key={tag.id} tag={tag} />
+                  ))}
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex-1 overflow-y-scroll">
+          <div className="h-fit pb-8 flex flex-col gap-2">
+            {props.tasks.map((task) => (
+              <TaskCard
+                key={task.id}
+                groupId={props.group.id!}
+                task={task}
+                tags={props.tags}
+              />
+            ))}
+          </div>
+        </div>
+      )}
     </div>
   )
 }

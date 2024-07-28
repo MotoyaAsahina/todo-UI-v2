@@ -16,6 +16,7 @@ type TaskCardProps = {
   groupId: number
   task: Task
   tags: { [key: number]: Tag }
+  hiddenTagIds?: number[]
 }
 
 export default function TaskCard(props: TaskCardProps) {
@@ -189,20 +190,27 @@ export default function TaskCard(props: TaskCardProps) {
         <div
           className={clsx(
             'mt-0.4 flex-wrap gap-1',
-            !props.task.dueDate && !props.task.tags!.length ? 'hidden' : 'flex',
+            !props.task.dueDate &&
+              (!props.task.tags!.length ||
+                !props.task.tags?.filter(
+                  (tagId) => !props.hiddenTagIds?.includes(tagId),
+                ).length)
+              ? 'hidden'
+              : 'flex',
           )}
         >
-          {props.task.dueDate ? (
-            <p
-              className="h-4.3 leading-4.3 font-300 mr-1"
-              onClick={() => setIsOpened(!isOpened)}
-            >
-              {formatDueDate(props.task.dueDate)}
-            </p>
-          ) : null}
-          {props.task.tags?.map((tagId) => (
-            <TaskTag key={tagId} tag={props.tags[tagId]} />
-          ))}
+          <p
+            className={clsx(
+              'h-4.3 leading-4.3 font-300 mr-1',
+              !props.task.dueDate && 'hidden',
+            )}
+            onClick={() => setIsOpened(!isOpened)}
+          >
+            {formatDueDate(props.task.dueDate)}
+          </p>
+          {props.task.tags
+            ?.filter((tagId) => !props.hiddenTagIds?.includes(tagId))
+            .map((tagId) => <TaskTag key={tagId} tag={props.tags[tagId]} />)}
         </div>
 
         {/* Description */}
