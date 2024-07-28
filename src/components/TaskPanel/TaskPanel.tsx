@@ -75,11 +75,19 @@ export default function TaskPanel(props: TaskPanelProps) {
   }, [props.tags, props.group.classifiedBy])
 
   const usedClassificationTags = useMemo(() => {
-    return classificationTags.filter((tag) =>
+    const usedClassificationTags = classificationTags.filter((tag) =>
       props.tasks
         .filter((task) => task.groupId === props.group.id)
         .some((task) => task.tags?.includes(tag.id!)),
     )
+    if (
+      props.tasks.some((task) =>
+        usedClassificationTags.every((tag) => !task.tags?.includes(tag.id!)),
+      )
+    ) {
+      usedClassificationTags.push({ id: -1 })
+    }
+    return usedClassificationTags
   }, [classificationTags, props.tasks, props.group.id])
 
   return (
@@ -153,13 +161,15 @@ export default function TaskPanel(props: TaskPanelProps) {
       {isClassified && props.group.classifiedBy ? (
         <div className="flex-1 overflow-y-scroll">
           <div className="pb-8 flex flex-col gap-4">
-            {[...usedClassificationTags, { id: -1 }].map((tag) => (
+            {[...usedClassificationTags].map((tag) => (
               <div key={tag.id}>
-                {tag.id! > 0 ? (
-                  <TaskTag tag={tag} />
-                ) : (
-                  <p className="text-xs font-400">Unclassified</p>
-                )}
+                <div className="pl-1">
+                  {tag.id! > 0 ? (
+                    <TaskTag tag={tag} />
+                  ) : (
+                    <p className="text-xs font-400">Unclassified</p>
+                  )}
+                </div>
                 <div className="h-fit flex flex-col gap-2 mt-2">
                   {props.tasks
                     .filter((task) =>
@@ -185,12 +195,15 @@ export default function TaskPanel(props: TaskPanelProps) {
             ))}
             <div
               className={clsx(
-                classificationTags.length === usedClassificationTags.length &&
-                  'hidden',
+                classificationTags.length ===
+                  usedClassificationTags.filter((tag) => tag.id !== -1)
+                    .length && 'hidden',
               )}
             >
-              <p className="text-xs font-400">Unused tags</p>
-              <div className="flex flex-wrap gap-1 mt-2">
+              <div className="pl-1">
+                <p className="text-xs font-400">Unused tags</p>
+              </div>
+              <div className="px-1 flex flex-wrap gap-1 mt-1.6">
                 {classificationTags
                   .filter((tag) => !usedClassificationTags.includes(tag))
                   .map((tag) => (
