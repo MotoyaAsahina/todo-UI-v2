@@ -19,8 +19,8 @@ export default function TaskTag(props: TaskTagProps) {
     <div
       className="w-fit h-4.3 px-1.8 rounded-2.2 b-1"
       style={{
-        backgroundColor: props.tag.mainColor,
-        borderColor: props.tag.borderColor || props.tag.mainColor,
+        backgroundColor: props.tag.mainColor || '#ffffff',
+        borderColor: props.tag.borderColor || props.tag.mainColor || '#ffffff',
         color: pickBlackOrWhite(props.tag.mainColor!),
       }}
     >
