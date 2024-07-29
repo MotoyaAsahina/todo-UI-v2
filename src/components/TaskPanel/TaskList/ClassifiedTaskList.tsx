@@ -22,11 +22,13 @@ export default function ClassifiedTaskList(props: ClassifiedTaskListProps) {
   }, [props.tags, props.group.classifiedBy])
 
   const usedClassificationTags = useMemo(() => {
-    const usedClassificationTags = classificationTags.filter((tag) =>
-      props.tasks
-        .filter((task) => task.groupId === props.group.id)
-        .some((task) => task.tags?.includes(tag.id!)),
-    )
+    const usedClassificationTags = classificationTags
+      .sort((a, b) => a.name!.localeCompare(b.name!))
+      .filter((tag) =>
+        props.tasks
+          .filter((task) => task.groupId === props.group.id)
+          .some((task) => task.tags?.includes(tag.id!)),
+      )
     if (
       props.tasks.some((task) =>
         usedClassificationTags.every((tag) => !task.tags?.includes(tag.id!)),
