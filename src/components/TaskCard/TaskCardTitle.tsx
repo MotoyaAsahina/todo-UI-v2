@@ -1,6 +1,6 @@
 import { IconCheck, IconDotsVertical, IconTrash } from '@tabler/icons-react'
 import clsx from 'clsx'
-import { useContext, useEffect, useRef, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 
 import { FetchContext } from '@/App'
 import DropdownMenu from '@/components/UI/DropdownMenu'
@@ -13,6 +13,13 @@ type TaskCardTitleProps = {
   task: Task
   isCardHovered: boolean
   openTaskEditor: () => void
+  refs: {
+    nameRef: React.RefObject<HTMLParagraphElement>
+    doneIconRef: React.RefObject<HTMLDivElement>
+    deleteIconRef: React.RefObject<HTMLDivElement>
+    menuIconRef: React.RefObject<HTMLDivElement>
+    menuRef: React.RefObject<HTMLDivElement>
+  }
 }
 
 export default function TaskCardTitle(props: TaskCardTitleProps) {
@@ -41,7 +48,6 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
     fetchAll()
   }
 
-  const menuIconRef = useRef<HTMLDivElement>(null)
   const [isMenuOpened, setIsMenuOpened] = useState(false)
 
   const dropdownMenuItems = [
@@ -93,6 +99,7 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
           )}
           onClick={props.openTaskEditor}
           title={`Created at: ${props.task.createdAt}\nUpdated at: ${props.task.updatedAt}`}
+          ref={props.refs.nameRef}
         >
           {props.task.title}
         </p>
@@ -108,18 +115,20 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
         <IconBase
           className={clsx(!isCmdPressed && 'hidden')}
           onClick={deleteTask}
+          ref={props.refs.deleteIconRef}
         >
           <IconTrash size={16} />
         </IconBase>
         <IconBase
           className={clsx(isCmdPressed && 'hidden')}
           onClick={putTaskDone}
+          ref={props.refs.doneIconRef}
         >
           <IconCheck size={16} />
         </IconBase>
         <IconBase
           onClick={() => setIsMenuOpened(!isMenuOpened)}
-          ref={menuIconRef}
+          ref={props.refs.menuIconRef}
         >
           <IconDotsVertical size={16} />
         </IconBase>
@@ -130,11 +139,12 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
             'absolute right-0 top-6 z-10',
             !isMenuOpened && 'hidden',
           )}
+          ref={props.refs.menuRef}
         >
           <DropdownMenu
             items={dropdownMenuItems}
             closeMenu={() => setIsMenuOpened(false)}
-            menuIconRef={menuIconRef}
+            menuIconRef={props.refs.menuIconRef}
           />
         </div>
       </div>

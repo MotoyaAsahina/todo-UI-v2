@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useContext, useState } from 'react'
+import { useContext, useRef, useState } from 'react'
 
 import TaskCardTitle from './TaskCardTitle'
 
@@ -61,11 +61,36 @@ export default function TaskCard(props: TaskCardProps) {
     setIsEditing(false)
   }
 
+  const { nameRef, doneIconRef, deleteIconRef, menuIconRef, menuRef } = {
+    nameRef: useRef<HTMLParagraphElement>(null),
+    doneIconRef: useRef<HTMLDivElement>(null),
+    deleteIconRef: useRef<HTMLDivElement>(null),
+    menuIconRef: useRef<HTMLDivElement>(null),
+    menuRef: useRef<HTMLDivElement>(null),
+  }
+
+  const handleOnClickCard = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    if (isEditing) return
+    if (
+      (e.target as Element).tagName === 'A' ||
+      nameRef.current?.contains(e.target as Node) ||
+      doneIconRef.current?.contains(e.target as Node) ||
+      deleteIconRef.current?.contains(e.target as Node) ||
+      menuIconRef.current?.contains(e.target as Node) ||
+      menuRef.current?.contains(e.target as Node)
+    )
+      return
+    setIsOpened(!isOpened)
+  }
+
   return (
     <div
       className="p-2 bg-white rounded-1 relative"
       onMouseOver={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
+      onClick={handleOnClickCard}
     >
       <div
         className={clsx(
@@ -81,6 +106,13 @@ export default function TaskCard(props: TaskCardProps) {
           task={props.task}
           isCardHovered={isHovered}
           openTaskEditor={openTaskEditor}
+          refs={{
+            nameRef,
+            doneIconRef,
+            deleteIconRef,
+            menuIconRef,
+            menuRef,
+          }}
         />
 
         {/* Due date and tags */}
@@ -101,7 +133,6 @@ export default function TaskCard(props: TaskCardProps) {
               'h-4.3 leading-4.3 font-300 mr-1',
               !props.task.dueDate && 'hidden',
             )}
-            onClick={() => setIsOpened(!isOpened)}
           >
             {formatDueDate(props.task.dueDate)}
           </p>
@@ -119,7 +150,6 @@ export default function TaskCard(props: TaskCardProps) {
             !props.task.description?.length && 'hidden',
             !isOpened && 'truncate',
           )}
-          onClick={() => setIsOpened(!isOpened)}
           dangerouslySetInnerHTML={{
             __html: isOpened
               ? makeBR(makeURL(props.task.description ?? ''))
