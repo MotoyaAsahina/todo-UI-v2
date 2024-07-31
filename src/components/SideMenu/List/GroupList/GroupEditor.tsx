@@ -64,9 +64,12 @@ export default function GroupEditor(props: GroupEditorProps) {
         type="text"
         className="w-full h-7 rounded-1 px-2 text-sm"
         placeholder="Classified by"
-        value={props.newGroup.classifiedBy || ''}
+        value={props.newGroup.classifiedBy ?? ''}
         onChange={(e) =>
-          props.setNewGroup({ ...props.newGroup, classifiedBy: e.target.value })
+          props.setNewGroup({
+            ...props.newGroup,
+            classifiedBy: e.target.value || null,
+          })
         }
         onKeyDown={handleKeyDown}
       />

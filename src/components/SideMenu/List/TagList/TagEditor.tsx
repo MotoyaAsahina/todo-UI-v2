@@ -77,7 +77,7 @@ export default function TagEditor(props: TagEditorProps) {
           type="text"
           className="w-full h-7 rounded-1 px-2 text-sm flex-1"
           placeholder="Main color"
-          value={props.newTag.mainColor || ''}
+          value={props.newTag.mainColor ?? ''}
           onChange={(e) =>
             props.setNewTag({ ...props.newTag, mainColor: e.target.value })
           }
@@ -101,7 +101,7 @@ export default function TagEditor(props: TagEditorProps) {
         <div
           className="h-3.6 w-3.6 rounded-1 bg-gray-2"
           style={{
-            backgroundColor: props.newTag.borderColor || '',
+            backgroundColor: props.newTag.borderColor ?? '',
           }}
         />
         <input
