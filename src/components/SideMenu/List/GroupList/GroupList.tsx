@@ -4,6 +4,8 @@ import { useContext, useState } from 'react'
 import { FetchContext } from '@/App'
 import GroupEditor from '@/components/SideMenu/List/GroupList/GroupEditor'
 import ListTitle from '@/components/SideMenu/List/ListTitle'
+import DraggableItem from '@/components/UI/DraggableList/DraggableItem'
+import DraggableList from '@/components/UI/DraggableList/DraggableList'
 import { Group, RequestGroup } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
 
@@ -94,20 +96,27 @@ export default function GroupList(props: GroupListProps) {
         />
       </div>
 
-      <div className="flex flex-col gap-0.5">
+      <DraggableList className="flex flex-col gap-0.5" group="group">
         {props.groups.map((group) => (
-          <div
+          <DraggableItem
             className={clsx(
               'py-1.5 px-2 hover:bg-slate-100 rounded-1 cursor-pointer',
               isEditing && editingGroupId === group.id && 'bg-slate-100',
             )}
             key={group.id}
             onClick={() => onClickEdit(group)}
+            onDrop={async (_, newIndex) => {
+              await groupApi.putGroup(group.id!, {
+                ...group,
+                order: newIndex,
+              })
+              fetchAll()
+            }}
           >
             <p className="text-md font-400">{group.name}</p>
-          </div>
+          </DraggableItem>
         ))}
-      </div>
+      </DraggableList>
     </div>
   )
 }
