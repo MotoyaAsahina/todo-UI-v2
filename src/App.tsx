@@ -5,8 +5,12 @@ import SideMenu from '@/components/SideMenu/SideMenu'
 import { Group, Tag, Task } from '@/lib/apis'
 import { useApi } from '@/lib/fetch'
 
-export const FetchContext = createContext<{ fetchAll: () => void }>({
+export const FetchContext = createContext<{
+  fetchAll: () => void
+  groups: Group[]
+}>({
   fetchAll: () => {},
+  groups: [],
 })
 
 export const DragContext = createContext<{
@@ -62,7 +66,7 @@ export default function App() {
   return (
     <div className="text-gray-800 text-base font-sans">
       <div className="grid min-h-screen w-full md:grid-cols-[200px_1fr] lg:grid-cols-[260px_1fr]">
-        <FetchContext.Provider value={{ fetchAll }}>
+        <FetchContext.Provider value={{ fetchAll, groups }}>
           <DragContext.Provider
             value={{
               chosenItem,

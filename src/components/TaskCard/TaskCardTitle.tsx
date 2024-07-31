@@ -24,7 +24,7 @@ type TaskCardTitleProps = {
 
 export default function TaskCardTitle(props: TaskCardTitleProps) {
   const { taskApi } = useApi()
-  const { fetchAll } = useContext(FetchContext)
+  const { fetchAll, groups } = useContext(FetchContext)
 
   const putTaskDone = async () => {
     await taskApi.putTaskDone(props.task.id!)
@@ -62,6 +62,19 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
       onClick: putTaskPinnedOrUnpinned,
     },
     { label: '---' },
+    {
+      label: 'Move to',
+      subItems: groups.map((group) => ({
+        label: group.name!,
+        onClick: async () => {
+          await taskApi.putTask(props.task.id!, {
+            ...props.task,
+            groupId: group.id,
+          })
+          fetchAll()
+        },
+      })),
+    },
     { label: 'Delete', onClick: deleteTask },
   ]
 
