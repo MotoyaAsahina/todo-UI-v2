@@ -36,7 +36,6 @@ export default function TaskCard(props: TaskCardProps) {
   const { fetchAll } = useContext(FetchContext)
 
   useEffect(() => {
-    console.log('changed', isEditing)
     if (isEditing) props.setEditingIds((prev) => [...prev, props.task.id!])
     else
       props.setEditingIds((prev) => prev.filter((id) => id !== props.task.id))

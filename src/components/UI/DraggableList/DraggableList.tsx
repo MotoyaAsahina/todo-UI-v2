@@ -114,27 +114,27 @@ export default function DraggableList(props: DraggableListProps) {
 
       chosenItemParentId.current = props.listId ?? null
 
-      const prevIndex = getItemIndex(chosenItem.current!)
+      // const prevIndex = getItemIndex(chosenItem.current!)
       target.before(chosenItem.current!)
 
-      getItemsSlice(chosenItemParent.current!, prevIndex).forEach((item) => {
-        animate(
-          item as HTMLElement,
-          'up',
-          (chosenItem.current!.clientHeight / item.clientHeight) * 100,
-        )
-      })
+      // getItemsSlice(chosenItemParent.current!, prevIndex).forEach((item) => {
+      //   animate(
+      //     item as HTMLElement,
+      //     'up',
+      //     (chosenItem.current!.clientHeight / item.clientHeight) * 100,
+      //   )
+      // })
 
-      const newIndex = getItemIndex(chosenItem.current!)
+      // const newIndex = getItemIndex(chosenItem.current!)
       chosenItemParent.current = draggableList.current
 
-      getItemsSlice(draggableList.current!, newIndex + 1).forEach((item) => {
-        animate(
-          item as HTMLElement,
-          'down',
-          (chosenItem.current!.clientHeight / item.clientHeight) * 100,
-        )
-      })
+      // getItemsSlice(draggableList.current!, newIndex + 1).forEach((item) => {
+      //   animate(
+      //     item as HTMLElement,
+      //     'down',
+      //     (chosenItem.current!.clientHeight / item.clientHeight) * 100,
+      //   )
+      // })
 
       latestMovingDirection.current = 'up'
       latestChangedItem.current = target
