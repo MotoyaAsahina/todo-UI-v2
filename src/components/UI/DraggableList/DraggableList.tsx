@@ -7,6 +7,7 @@ type DraggableListProps = {
   children: React.ReactElement[]
   listId?: number
   group: string
+  onCancel?: () => void
 }
 
 const getItemsSlice = (list: HTMLDivElement, start: number, end?: number) =>
@@ -212,16 +213,22 @@ export default function DraggableList(props: DraggableListProps) {
         <div
           key={child.key}
           {...child.props}
-          draggable
           onDragStart={dragStart}
           onDragEnter={dragEnter}
           onDrag={onDrag}
-          onDrop={() =>
+          onDrop={() => {
             child.props.onDrop(
               chosenItemParentId.current,
               getItemIndex(chosenItem.current!),
             )
-          }
+            chosenItem.current = null
+          }}
+          onDragEnd={() => {
+            if (chosenItem.current) {
+              chosenItem.current = null
+              props.onCancel?.()
+            }
+          }}
         />
       ))}
     </div>

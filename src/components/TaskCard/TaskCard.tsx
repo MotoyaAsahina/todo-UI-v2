@@ -1,5 +1,5 @@
 import clsx from 'clsx'
-import { useContext, useRef, useState } from 'react'
+import { useContext, useEffect, useRef, useState } from 'react'
 
 import TaskCardTitle from './TaskCardTitle'
 
@@ -15,6 +15,7 @@ type TaskCardProps = {
   task: Task
   tags: { [key: number]: Tag }
   hiddenTagIds?: number[]
+  setEditingIds: React.Dispatch<React.SetStateAction<number[]>>
 }
 
 export default function TaskCard(props: TaskCardProps) {
@@ -33,6 +34,14 @@ export default function TaskCard(props: TaskCardProps) {
 
   const { taskApi } = useApi()
   const { fetchAll } = useContext(FetchContext)
+
+  useEffect(() => {
+    console.log('changed', isEditing)
+    if (isEditing) props.setEditingIds((prev) => [...prev, props.task.id!])
+    else
+      props.setEditingIds((prev) => prev.filter((id) => id !== props.task.id))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isEditing])
 
   const updateTask = async (newTask: RequestTask) => {
     newTask.groupId = props.groupId

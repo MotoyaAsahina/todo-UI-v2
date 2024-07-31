@@ -1,6 +1,7 @@
 type DraggableItemProps = {
   children: React.ReactElement
-  className: string
+  className?: string
+  draggable?: boolean
   onDrop?: (parentId: number | null, newIndex: number) => void
   onClick?: (e: React.MouseEvent<HTMLDivElement>) => void
 }
