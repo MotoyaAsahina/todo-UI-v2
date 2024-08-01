@@ -10,7 +10,7 @@ type SideMenuProps = {
 
 export default function SideMenu(props: SideMenuProps) {
   return (
-    <div className="h-screen overflow-y-scroll overflow-x-hidden hidden md:block">
+    <div className="md:w-200px lg:w-260px shrink-0 h-screen overflow-y-scroll overflow-x-hidden <md:hidden">
       <div className="flex b-r-0.75 p-4 flex-col gap-5">
         <AppLogo />
 
