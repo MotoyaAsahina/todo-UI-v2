@@ -80,7 +80,7 @@ export default function DropdownMenu(props: DropdownMenuProps) {
                 {item.subItems?.map((subItem) => (
                   <div
                     key={subItem.label}
-                    className="px-2 py-1 rounded-1 hover:bg-slate-100 cursor-pointer"
+                    className="px-3 py-1 rounded-1 hover:bg-slate-100 cursor-pointer"
                     onClick={() => {
                       subItem.onClick()
                       props.closeMenu()

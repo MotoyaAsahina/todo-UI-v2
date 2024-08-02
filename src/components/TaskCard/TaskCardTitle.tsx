@@ -64,16 +64,18 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
     { label: '---' },
     {
       label: 'Move to',
-      subItems: groups.map((group) => ({
-        label: group.name!,
-        onClick: async () => {
-          await taskApi.putTask(props.task.id!, {
-            ...props.task,
-            groupId: group.id,
-          })
-          fetchAll()
-        },
-      })),
+      subItems: groups
+        .filter((group) => group.id !== props.task.groupId)
+        .map((group) => ({
+          label: group.name!,
+          onClick: async () => {
+            await taskApi.putTask(props.task.id!, {
+              ...props.task,
+              groupId: group.id,
+            })
+            fetchAll()
+          },
+        })),
     },
     { label: 'Delete', onClick: deleteTask },
   ]
