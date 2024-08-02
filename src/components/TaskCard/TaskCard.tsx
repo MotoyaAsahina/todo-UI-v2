@@ -146,7 +146,7 @@ export default function TaskCard(props: TaskCardProps) {
         {/* Description */}
         <p
           className={clsx(
-            'mt-0.2 text-sm leading-snug font-300',
+            'mt-0.2 text-sm leading-snug font-300 [&>a]:hover:underline',
             !props.task.description?.length && 'hidden',
             !isOpened && 'truncate',
           )}

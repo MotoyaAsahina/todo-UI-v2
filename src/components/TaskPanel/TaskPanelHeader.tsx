@@ -43,7 +43,7 @@ export default function TaskPanelHeader(props: TaskPanelHeaderProps) {
   return (
     <div className="h-10 flex gap-2 items-center">
       {/* Task length */}
-      <span className="h-5.2 leading-5 px-1.8 bg-slate-200 text-sm rounded-3">
+      <span className="h-4.8 leading-4.6 px-1.6 bg-slate-200 text-xs rounded-3">
         {props.taskLength}
       </span>
 
