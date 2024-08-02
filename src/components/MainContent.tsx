@@ -11,7 +11,7 @@ export default function MainContent(props: MainContentProps) {
   return (
     <div
       className="h-svh w-full md:w-[calc(100vw-200px)] lg:w-[calc(100vw-260px)]
-                 pt-10 <sm:pt-6 bg-slate-200 bg-opacity-60"
+                 <sm:pt-6 bg-slate-200 bg-opacity-60"
     >
       <div className="w-full h-full flex overflow-scroll px-8 gap-6 <sm:snap-x <sm:snap-mandatory">
         {props.groups.map((group) => (
