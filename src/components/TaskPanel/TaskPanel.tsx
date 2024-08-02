@@ -58,7 +58,7 @@ export default function TaskPanel(props: TaskPanelProps) {
   }
 
   return (
-    <div className="<sm:w-[calc(100vw-3rem)] w-76 h-full pt-10 shrink-0 flex flex-col gap-4 <sm:snap-center">
+    <div className="<sm:w-[calc(100vw-3rem)] w-76 h-full pt-10 <sm:pt-6 shrink-0 flex flex-col gap-4 <sm:snap-center">
       {/* Panel header with task editor */}
       <div
         className="px-2 bg-white rounded-1"
