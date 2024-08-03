@@ -1,3 +1,4 @@
+import { IconChevronDown, IconChevronRight } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { useContext, useState } from 'react'
 
@@ -78,6 +79,27 @@ export default function GroupList(props: GroupListProps) {
     closeGroupEditor()
   }
 
+  const unarchiveGroup = async (groupId: number) => {
+    await groupApi.putGroupUnarchived(groupId)
+    fetchAll()
+  }
+
+  const [showArchived, setShowArchived] = useState(false)
+  const [archivedGroups, setArchivedGroups] = useState<Group[]>([])
+
+  const onClickShowArchived = async () => {
+    if (!showArchived)
+      setArchivedGroups(
+        (await groupApi.getGroups(true)).data.sort(
+          (a, b) => a.order! - b.order!,
+        ),
+      )
+    setShowArchived(!showArchived)
+  }
+
+  // TODO: When opening the archived groups and a group is archived,
+  //  it should be added to the archived groups list
+
   return (
     <div className="my-2 ml-1">
       <ListTitle onClickCreate={onClickCreate}>Groups</ListTitle>
@@ -117,6 +139,39 @@ export default function GroupList(props: GroupListProps) {
           </DraggableItem>
         ))}
       </DraggableList>
+
+      <div className="mt-3 flex flex-col gap-3.2">
+        <div
+          className="w-fit flex gap-1 items-center cursor-pointer"
+          onClick={onClickShowArchived}
+        >
+          {!showArchived ? (
+            <IconChevronRight size={14} stroke={1.5} />
+          ) : (
+            <IconChevronDown size={14} stroke={1.5} />
+          )}
+          <p className="pl-1 text-sm font-300">Archived Groups</p>
+        </div>
+        <div
+          className={clsx('flex-col gap-2', showArchived ? 'flex' : 'hidden')}
+        >
+          {archivedGroups.map((group) => (
+            <div
+              key={group.id}
+              className="flex font-300 pr-2 [&>p]:hover:visible"
+              title={group.order!.toString()}
+            >
+              <p className="text-sm flex-1 px-2">{group.name}</p>
+              <p
+                className="text-xs cursor-pointer hover:underline invisible"
+                onClick={() => unarchiveGroup(group.id!)}
+              >
+                Restore
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
