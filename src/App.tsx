@@ -32,20 +32,25 @@ export const DragContext = createContext<{
 })
 
 export default function App() {
-  const { fetchTasks, fetchGroups, fetchTags } = useApi()
+  const { fetchTasks, fetchGroups, fetchTags, groupApi } = useApi()
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [groups, setGroups] = useState<Group[]>([])
+  const [archivedGroups, setArchivedGroups] = useState<Group[]>([])
   const [tags, setTags] = useState<{ [key: number]: Tag }>([])
 
   const fetchAll = async () => {
-    Promise.all([fetchTasks(), fetchGroups(), fetchTags()]).then(
-      ([tasks, groups, tags]) => {
-        setTasks(tasks)
-        setGroups(groups.sort((a, b) => a.order! - b.order!))
-        setTags(tags)
-      },
-    )
+    Promise.all([
+      fetchTasks(),
+      fetchGroups(),
+      fetchTags(),
+      groupApi.getGroups(true),
+    ]).then(([tasks, groups, tags, archivedGroups]) => {
+      setTasks(tasks)
+      setGroups(groups.sort((a, b) => a.order! - b.order!))
+      setTags(tags)
+      setArchivedGroups(archivedGroups.data)
+    })
   }
 
   useEffect(() => {
@@ -78,7 +83,11 @@ export default function App() {
               latestMovingDirection,
             }}
           >
-            <SideMenu tags={tags} groups={groups} />
+            <SideMenu
+              tags={tags}
+              groups={groups}
+              archivedGroups={archivedGroups}
+            />
             <MainContent tasks={tasks} groups={groups} tags={tags} />
           </DragContext.Provider>
         </FetchContext.Provider>

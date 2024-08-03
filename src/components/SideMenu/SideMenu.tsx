@@ -6,6 +6,7 @@ import { Group, Tag } from '@/lib/apis'
 type SideMenuProps = {
   tags: { [key: number]: Tag }
   groups: Group[]
+  archivedGroups: Group[]
 }
 
 export default function SideMenu(props: SideMenuProps) {
@@ -22,7 +23,10 @@ export default function SideMenu(props: SideMenuProps) {
 
         <TagList tags={props.tags} />
 
-        <GroupList groups={props.groups} />
+        <GroupList
+          groups={props.groups}
+          archivedGroups={props.archivedGroups}
+        />
       </div>
     </div>
   )

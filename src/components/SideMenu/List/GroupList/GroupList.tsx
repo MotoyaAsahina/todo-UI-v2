@@ -12,6 +12,7 @@ import { useApi } from '@/lib/fetch'
 
 type GroupListProps = {
   groups: Group[]
+  archivedGroups: Group[]
 }
 
 const defaultGroup: RequestGroup = {
@@ -79,26 +80,16 @@ export default function GroupList(props: GroupListProps) {
     closeGroupEditor()
   }
 
+  const [showArchived, setShowArchived] = useState(false)
+
+  const onClickShowArchived = async () => {
+    setShowArchived(!showArchived)
+  }
+
   const unarchiveGroup = async (groupId: number) => {
     await groupApi.putGroupUnarchived(groupId)
     fetchAll()
   }
-
-  const [showArchived, setShowArchived] = useState(false)
-  const [archivedGroups, setArchivedGroups] = useState<Group[]>([])
-
-  const onClickShowArchived = async () => {
-    if (!showArchived)
-      setArchivedGroups(
-        (await groupApi.getGroups(true)).data.sort(
-          (a, b) => a.order! - b.order!,
-        ),
-      )
-    setShowArchived(!showArchived)
-  }
-
-  // TODO: When opening the archived groups and a group is archived,
-  //  it should be added to the archived groups list
 
   return (
     <div className="my-2 ml-1">
@@ -155,7 +146,7 @@ export default function GroupList(props: GroupListProps) {
         <div
           className={clsx('flex-col gap-2', showArchived ? 'flex' : 'hidden')}
         >
-          {archivedGroups.map((group) => (
+          {props.archivedGroups.map((group) => (
             <div
               key={group.id}
               className="flex font-300 pr-2 [&>p]:hover:visible"
