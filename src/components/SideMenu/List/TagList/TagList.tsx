@@ -172,7 +172,7 @@ export default function TagList(props: TagListProps) {
           ) : (
             <IconChevronDown size={14} stroke={1.5} />
           )}
-          <p className="pl-1 text-sm font-300">Archived Groups</p>
+          <p className="pl-1 text-sm font-300">Archived Tags</p>
         </div>
         <div
           className={clsx(
