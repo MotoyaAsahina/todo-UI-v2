@@ -25,12 +25,28 @@ export function useApi() {
     return tagMap
   }
 
+  const fetchArchivedGroups = async () => {
+    const groups = await groupApi.getGroups(true)
+    return groups.data
+  }
+
+  const fetchArchivedTags = async () => {
+    const tags = await tagApi.getTags(true)
+    const tagMap: { [key: number]: Tag } = {}
+    tags.data.forEach((tag) => {
+      tagMap[tag.id!] = tag
+    })
+    return tagMap
+  }
+
   return {
     taskApi,
     groupApi,
     tagApi,
     fetchTasks,
     fetchGroups,
+    fetchArchivedGroups,
     fetchTags,
+    fetchArchivedTags,
   }
 }

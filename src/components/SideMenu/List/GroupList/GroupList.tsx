@@ -109,6 +109,7 @@ export default function GroupList(props: GroupListProps) {
         />
       </div>
 
+      {/* Draggable Group List */}
       <DraggableList className="flex flex-col gap-0.5" group="group">
         {props.groups.map((group) => (
           <DraggableItem
@@ -131,6 +132,7 @@ export default function GroupList(props: GroupListProps) {
         ))}
       </DraggableList>
 
+      {/* Archived Group List */}
       <div className="mt-3 flex flex-col gap-3.2">
         <div
           className="w-fit flex gap-1 items-center cursor-pointer"
@@ -150,7 +152,6 @@ export default function GroupList(props: GroupListProps) {
             <div
               key={group.id}
               className="flex font-300 pr-2 [&>p]:hover:visible"
-              title={group.order!.toString()}
             >
               <p className="text-sm flex-1 px-2">{group.name}</p>
               <p

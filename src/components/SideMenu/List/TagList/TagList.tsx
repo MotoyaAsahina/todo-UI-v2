@@ -1,3 +1,4 @@
+import { IconChevronDown, IconChevronRight } from '@tabler/icons-react'
 import clsx from 'clsx'
 import { useContext, useMemo, useState } from 'react'
 
@@ -9,6 +10,7 @@ import { useApi } from '@/lib/fetch'
 
 type TagListProps = {
   tags: { [key: number]: Tag }
+  archivedTags: { [key: number]: Tag }
 }
 
 const defaultTag: RequestTag = {
@@ -93,6 +95,17 @@ export default function TagList(props: TagListProps) {
     closeTagEditor()
   }
 
+  const [showArchived, setShowArchived] = useState(false)
+
+  const onClickShowArchived = async () => {
+    setShowArchived(!showArchived)
+  }
+
+  const unarchiveTag = async (tagId: number) => {
+    await tagApi.putTagUnarchived(tagId)
+    fetchAll()
+  }
+
   return (
     <div className="my-2 ml-1">
       <ListTitle onClickCreate={onClickCreate}>Tags</ListTitle>
@@ -146,6 +159,52 @@ export default function TagList(props: TagListProps) {
               </div>
             </div>
           ))}
+      </div>
+
+      {/* Archived Tag List */}
+      <div className="mt-3 flex flex-col gap-3">
+        <div
+          className="w-fit flex gap-1 items-center cursor-pointer"
+          onClick={onClickShowArchived}
+        >
+          {!showArchived ? (
+            <IconChevronRight size={14} stroke={1.5} />
+          ) : (
+            <IconChevronDown size={14} stroke={1.5} />
+          )}
+          <p className="pl-1 text-sm font-300">Archived Groups</p>
+        </div>
+        <div
+          className={clsx(
+            'pl-1.5 flex-col gap-2',
+            showArchived ? 'flex' : 'hidden',
+          )}
+        >
+          {Object.values(props.archivedTags)
+            .sort((a, b) => a.name!.localeCompare(b.name!))
+            .map((tag) => (
+              <div
+                key={tag.id}
+                className="flex gap-1 pl-1 pr-2 items-center [&>p]:hover:visible font-300"
+              >
+                <div
+                  className="h-3.6 w-3.6 rounded-1 bg-gray-2 b-1"
+                  style={{
+                    backgroundColor: tag.mainColor,
+                    borderColor: tag.borderColor || tag.mainColor,
+                  }}
+                />
+                <p className="text-xs flex-1">{tag.name}</p>
+
+                <p
+                  className="text-xs cursor-pointer hover:underline invisible"
+                  onClick={() => unarchiveTag(tag.id!)}
+                >
+                  Restore
+                </p>
+              </div>
+            ))}
+        </div>
       </div>
     </div>
   )

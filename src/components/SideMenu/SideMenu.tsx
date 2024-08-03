@@ -5,6 +5,7 @@ import { Group, Tag } from '@/lib/apis'
 
 type SideMenuProps = {
   tags: { [key: number]: Tag }
+  archivedTags: { [key: number]: Tag }
   groups: Group[]
   archivedGroups: Group[]
 }
@@ -21,7 +22,7 @@ export default function SideMenu(props: SideMenuProps) {
           placeholder="Search"
         />
 
-        <TagList tags={props.tags} />
+        <TagList tags={props.tags} archivedTags={props.archivedTags} />
 
         <GroupList
           groups={props.groups}

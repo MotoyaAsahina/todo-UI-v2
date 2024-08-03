@@ -32,24 +32,33 @@ export const DragContext = createContext<{
 })
 
 export default function App() {
-  const { fetchTasks, fetchGroups, fetchTags, groupApi } = useApi()
+  const {
+    fetchTasks,
+    fetchGroups,
+    fetchTags,
+    fetchArchivedGroups,
+    fetchArchivedTags,
+  } = useApi()
 
   const [tasks, setTasks] = useState<Task[]>([])
   const [groups, setGroups] = useState<Group[]>([])
-  const [archivedGroups, setArchivedGroups] = useState<Group[]>([])
   const [tags, setTags] = useState<{ [key: number]: Tag }>([])
+  const [archivedGroups, setArchivedGroups] = useState<Group[]>([])
+  const [archivedTags, setArchivedTags] = useState<{ [key: number]: Tag }>([])
 
   const fetchAll = async () => {
     Promise.all([
       fetchTasks(),
       fetchGroups(),
       fetchTags(),
-      groupApi.getGroups(true),
-    ]).then(([tasks, groups, tags, archivedGroups]) => {
+      fetchArchivedGroups(),
+      fetchArchivedTags(),
+    ]).then(([tasks, groups, tags, archivedGroups, archivedTags]) => {
       setTasks(tasks)
       setGroups(groups.sort((a, b) => a.order! - b.order!))
       setTags(tags)
-      setArchivedGroups(archivedGroups.data)
+      setArchivedGroups(archivedGroups.sort((a, b) => a.order! - b.order!))
+      setArchivedTags(archivedTags)
     })
   }
 
@@ -85,6 +94,7 @@ export default function App() {
           >
             <SideMenu
               tags={tags}
+              archivedTags={archivedTags}
               groups={groups}
               archivedGroups={archivedGroups}
             />
