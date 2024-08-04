@@ -13,17 +13,22 @@ const formatDueDate = (d?: string | null) => {
   return `${year}${month}/${day}(${weekDay}) ${hour}:${minute}`
 }
 
-const surroundURL = (url: string) => {
+const surroundURL = (title?: string) => (url: string) => {
   const style = 'overflow-wrap: break-word; color: #135fab'
   const rel = 'noopener noreferrer'
-  return `<a style="${style}" href="${url}" target="_blank" rel="${rel}">${url}</a>`
+  return `<a style="${style}" href="${url}" target="_blank" rel="${rel}">${title ?? url}</a>`
 }
 
 const makeURL = (text: string) => {
-  return text.replace(
-    /(https?:\/\/[-_.!~*'()a-zA-Z0-9;/?:@&=+$,%#]+)/g,
-    surroundURL,
+  const mdReplacedText = text.replace(
+    /\[(.*?)\]\((https?:\/\/.*?)\)/g,
+    (_, title, url) => surroundURL(title)(url),
   )
+  // return mdReplacedText
+  return mdReplacedText.replace(/(https?:\/\/[^\s]+)/g, (_, url) => {
+    if (mdReplacedText.includes(`href="${url}`)) return url
+    return surroundURL()(url)
+  })
 }
 
 const makeBR = (text: string) => {
