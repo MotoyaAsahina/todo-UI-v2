@@ -73,7 +73,7 @@ export default function DropdownMenu(props: DropdownMenuProps) {
                         the menu is hidden when displayed on the left side */}
               <div
                 className={clsx(
-                  'absolute w-36 mb-2 flex-col gap-1 p-1 rounded-1 bg-white b-1 right-31 top--2 z-11',
+                  'absolute w-36 mb-2 flex-col gap-1 p-1 rounded-1 bg-white b-1 right-31 top--2 z-11 cursor-default',
                   item.subItems && hoveringIndex === index ? 'flex' : 'hidden',
                 )}
               >
