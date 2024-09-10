@@ -13,13 +13,16 @@ export default function PinnedTaskList(props: PinnedTaskListProps) {
   return (
     <div className="ml-1 my-1">
       <ListTitle disableCreate>Pinned Tasks</ListTitle>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-2">
         {props.pinnedTasks.map((task) => (
-          <div key={task.id} className="px-1 py-0.5 flex gap-0.8 items-start">
+          <div
+            key={task.id}
+            className="px-1 py-0.5 flex gap-0.8 items-baseline"
+          >
             <p className="text-md font-emoji">
               {selectStamp(task.dueDate) || '📌'}
             </p>
-            <div className="flex flex-wrap items-center gap-1">
+            <div className="flex flex-wrap items-baseline gap-1">
               <p className="text-md font-400">{task.title}</p>
               <p className="text-xs font-300">
                 (
