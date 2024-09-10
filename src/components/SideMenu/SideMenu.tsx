@@ -1,13 +1,16 @@
-import AppLogo from '@/components/SideMenu/AppLogo'
-import GroupList from '@/components/SideMenu/List/GroupList/GroupList'
-import TagList from '@/components/SideMenu/List/TagList/TagList'
-import { Group, Tag } from '@/lib/apis'
+import AppLogo from './AppLogo'
+import GroupList from './List/GroupList/GroupList'
+import PinnedTaskList from './List/PinnedTaskList/PinnedTaskList'
+import TagList from './List/TagList/TagList'
+
+import { Group, Tag, Task } from '@/lib/apis'
 
 type SideMenuProps = {
   tags: { [key: number]: Tag }
   archivedTags: { [key: number]: Tag }
   groups: Group[]
   archivedGroups: Group[]
+  pinnedTasks: Task[]
 }
 
 export default function SideMenu(props: SideMenuProps) {
@@ -20,6 +23,12 @@ export default function SideMenu(props: SideMenuProps) {
           type="text"
           className="w-full h-7 px-2 bg-white rounded-1 mx-0.5 b-1 text-xs font-300"
           placeholder="Search"
+        />
+
+        <PinnedTaskList
+          groups={props.groups}
+          tags={props.tags}
+          pinnedTasks={props.pinnedTasks}
         />
 
         <TagList tags={props.tags} archivedTags={props.archivedTags} />

@@ -1,8 +1,10 @@
 import { IconPlus } from '@tabler/icons-react'
+import clsx from 'clsx'
 
 type ListTitleProps = {
   children: React.ReactNode
-  onClickCreate: () => void
+  onClickCreate?: () => void
+  disableCreate?: boolean
 }
 
 export default function ListTitle(props: ListTitleProps) {
@@ -12,7 +14,10 @@ export default function ListTitle(props: ListTitleProps) {
         {props.children}
       </p>
       <div
-        className="h-fit p-0.4 b-1 rd-1 cursor-pointer"
+        className={clsx(
+          'h-fit p-0.4 b-1 rd-1 cursor-pointer',
+          props.disableCreate && 'invisible',
+        )}
         onClick={props.onClickCreate}
       >
         <IconPlus size={13} stroke={1.5} />

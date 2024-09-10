@@ -1,4 +1,4 @@
-import { createContext, useEffect, useRef, useState } from 'react'
+import { createContext, useEffect, useMemo, useRef, useState } from 'react'
 
 import MainContent from '@/components/MainContent'
 import SideMenu from '@/components/SideMenu/SideMenu'
@@ -77,6 +77,11 @@ export default function App() {
   const latestChangedItem = useRef<HTMLElement | null>(null)
   const latestMovingDirection = useRef<'up' | 'down'>('up')
 
+  const pinnedTasks = useMemo(
+    () => tasks.filter((task) => task.pinned),
+    [tasks],
+  )
+
   return (
     <div className="text-gray-800 text-base font-sans">
       <div className="h-svh w-full flex">
@@ -97,6 +102,7 @@ export default function App() {
               archivedTags={archivedTags}
               groups={groups}
               archivedGroups={archivedGroups}
+              pinnedTasks={pinnedTasks}
             />
             <MainContent tasks={tasks} groups={groups} tags={tags} />
           </DragContext.Provider>
