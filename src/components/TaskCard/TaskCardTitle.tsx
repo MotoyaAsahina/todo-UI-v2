@@ -91,6 +91,7 @@ export default function TaskCardTitle(props: TaskCardTitleProps) {
     document.body.addEventListener('keyup', (e) => {
       if (e.key === 'Meta' || e.key === 'Control') setIsCmdPressed(false)
     })
+    window.addEventListener('blur', () => setIsCmdPressed(false))
   }, [])
 
   return (
